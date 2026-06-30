@@ -4,80 +4,83 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Voiage de souvenirs à vapeur — écoute</title>
-<style>
-  body {
-    font-family: Helvetica, Arial, sans-serif;
-    max-width: 720px;
-    margin: 40px auto;
-    padding: 0 20px 80px;
-    color: #111;
-    line-height: 1.5;
-  }
 
-  h1 {
-    font-size: 42px;
-    line-height: 0.95;
-    text-transform: uppercase;
-    margin-bottom: 38px;
-    letter-spacing: -1px;
-  }
+  <style>
+    body {
+      font-family: Helvetica, Arial, sans-serif;
+      max-width: 720px;
+      margin: 40px auto;
+      padding: 0 20px 90px;
+      color: #111;
+      line-height: 1.5;
+    }
 
-  h2 {
-    margin-top: 56px;
-    margin-bottom: 16px;
-    font-size: 22px;
-    text-transform: uppercase;
-    border-top: 2px solid #111;
-    padding-top: 22px;
-  }
+    h1 {
+      font-size: 42px;
+      line-height: 0.95;
+      text-transform: uppercase;
+      margin-bottom: 38px;
+      letter-spacing: -1px;
+    }
 
-  h3 {
-    margin: 28px 0 8px;
-    font-size: 15px;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-    font-weight: 700;
-  }
+    .category-title {
+      margin-top: 56px;
+      margin-bottom: 16px;
+      font-size: 24px;
+      text-transform: uppercase;
+      border-top: 2px solid #111;
+      padding-top: 22px;
+      font-weight: 800;
+    }
 
-  p {
-    margin-bottom: 22px;
-  }
+    .category-intro {
+      margin-bottom: 34px;
+      font-size: 17px;
+    }
 
-  .group {
-    margin: 18px 0 26px;
-    padding-left: 18px;
-    border-left: 1px solid #111;
-  }
+    .group {
+      margin: 22px 0 26px;
+      padding-left: 18px;
+      border-left: 1px solid #111;
+    }
 
-  label {
-    display: inline-block;
-    margin: 6px 14px 6px 0;
-    font-size: 16px;
-  }
+    .group-title {
+      margin: 0 0 10px;
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-weight: 800;
+    }
 
-  input[type="checkbox"] {
-    margin-right: 6px;
-  }
+    label {
+      display: inline-block;
+      margin: 6px 14px 6px 0;
+      font-size: 16px;
+    }
 
-  button {
-    margin: 34px 10px 25px 0;
-    padding: 12px 16px;
-    border: 1px solid #111;
-    background: white;
-    font-size: 16px;
-    cursor: pointer;
-  }
+    input[type="checkbox"] {
+      margin-right: 6px;
+    }
 
-  audio {
-    width: 100%;
-    margin-top: 15px;
-  }
+    button {
+      margin: 34px 10px 25px 0;
+      padding: 12px 16px;
+      border: 1px solid #111;
+      background: white;
+      font-size: 16px;
+      cursor: pointer;
+    }
 
-  #nowPlaying {
-    font-weight: bold;
-    margin-top: 20px;
-  }
-</style>
+    audio {
+      width: 100%;
+      margin-top: 15px;
+    }
+
+    #nowPlaying {
+      font-weight: bold;
+      margin-top: 20px;
+    }
+  </style>
 </head>
 
 <body>
@@ -88,77 +91,94 @@
 Choisissez un ou plusieurs fragments. Les sons sélectionnés se joueront automatiquement les uns après les autres.
 </p>
 
-<h2>Vocalisations</h2>
-<p>Fragments vocaux issus des ateliers. Chaque sélection compose une écoute différente.</p>
+<h2 class="category-title">Vocalisations</h2>
+
+<p class="category-intro">
+Fragments vocaux issus des ateliers. Chaque sélection compose une écoute différente.
+</p>
 
 <div class="group">
-  <h3>Berk</h3>
+  <h3 class="group-title">Berk</h3>
   <label><input type="checkbox" value="sons/vocalisations/berk_0.mp3" data-title="Berk 0"> 0</label>
   <label><input type="checkbox" value="sons/vocalisations/berk_1.mp3" data-title="Berk 1"> 1</label>
   <label><input type="checkbox" value="sons/vocalisations/berk_2.mp3" data-title="Berk 2"> 2</label>
   <label><input type="checkbox" value="sons/vocalisations/berk_3.mp3" data-title="Berk 3"> 3</label>
 </div>
 
-<h2>Bham</h2>
-<label><input type="checkbox" value="sons/vocalisations/bham_0.mp3" data-title="Bham 0"> 0</label>
-<label><input type="checkbox" value="sons/vocalisations/bham_1.mp3" data-title="Bham 1"> 1</label>
-<label><input type="checkbox" value="sons/vocalisations/bham_2.mp3" data-title="Bham 2"> 2</label>
-<label><input type="checkbox" value="sons/vocalisations/bham_3.mp3" data-title="Bham 3"> 3</label>
+<div class="group">
+  <h3 class="group-title">Bham</h3>
+  <label><input type="checkbox" value="sons/vocalisations/bham_0.mp3" data-title="Bham 0"> 0</label>
+  <label><input type="checkbox" value="sons/vocalisations/bham_1.mp3" data-title="Bham 1"> 1</label>
+  <label><input type="checkbox" value="sons/vocalisations/bham_2.mp3" data-title="Bham 2"> 2</label>
+  <label><input type="checkbox" value="sons/vocalisations/bham_3.mp3" data-title="Bham 3"> 3</label>
+</div>
 
-<h2>Ehi</h2>
-<label><input type="checkbox" value="sons/vocalisations/ehi_0.mp3" data-title="Ehi 0"> 0</label>
-<label><input type="checkbox" value="sons/vocalisations/ehi_1.mp3" data-title="Ehi 1"> 1</label>
-<label><input type="checkbox" value="sons/vocalisations/ehi_2.mp3" data-title="Ehi 2"> 2</label>
-<label><input type="checkbox" value="sons/vocalisations/ehi_3.mp3" data-title="Ehi 3"> 3</label>
+<div class="group">
+  <h3 class="group-title">Ehi</h3>
+  <label><input type="checkbox" value="sons/vocalisations/ehi_0.mp3" data-title="Ehi 0"> 0</label>
+  <label><input type="checkbox" value="sons/vocalisations/ehi_1.mp3" data-title="Ehi 1"> 1</label>
+  <label><input type="checkbox" value="sons/vocalisations/ehi_2.mp3" data-title="Ehi 2"> 2</label>
+  <label><input type="checkbox" value="sons/vocalisations/ehi_3.mp3" data-title="Ehi 3"> 3</label>
+</div>
 
-<h2>Mm</h2>
-<label><input type="checkbox" value="sons/vocalisations/mm_0.mp3" data-title="Mm 0"> 0</label>
-<label><input type="checkbox" value="sons/vocalisations/mm_1.mp3" data-title="Mm 1"> 1</label>
-<label><input type="checkbox" value="sons/vocalisations/mm_2.mp3" data-title="Mm 2"> 2</label>
-<label><input type="checkbox" value="sons/vocalisations/mm_3.mp3" data-title="Mm 3"> 3</label>
-<label><input type="checkbox" value="sons/vocalisations/mm_4.mp3" data-title="Mm 4"> 4</label>
-<label><input type="checkbox" value="sons/vocalisations/mm_5.mp3" data-title="Mm 5"> 5</label>
-<label><input type="checkbox" value="sons/vocalisations/mm_6.mp3" data-title="Mm 6"> 6</label>
-<label><input type="checkbox" value="sons/vocalisations/mm_7.mp3" data-title="Mm 7"> 7</label>
-<label><input type="checkbox" value="sons/vocalisations/mm_8.mp3" data-title="Mm 8"> 8</label>
+<div class="group">
+  <h3 class="group-title">Mm</h3>
+  <label><input type="checkbox" value="sons/vocalisations/mm_0.mp3" data-title="Mm 0"> 0</label>
+  <label><input type="checkbox" value="sons/vocalisations/mm_1.mp3" data-title="Mm 1"> 1</label>
+  <label><input type="checkbox" value="sons/vocalisations/mm_2.mp3" data-title="Mm 2"> 2</label>
+  <label><input type="checkbox" value="sons/vocalisations/mm_3.mp3" data-title="Mm 3"> 3</label>
+  <label><input type="checkbox" value="sons/vocalisations/mm_4.mp3" data-title="Mm 4"> 4</label>
+  <label><input type="checkbox" value="sons/vocalisations/mm_5.mp3" data-title="Mm 5"> 5</label>
+  <label><input type="checkbox" value="sons/vocalisations/mm_6.mp3" data-title="Mm 6"> 6</label>
+  <label><input type="checkbox" value="sons/vocalisations/mm_7.mp3" data-title="Mm 7"> 7</label>
+  <label><input type="checkbox" value="sons/vocalisations/mm_8.mp3" data-title="Mm 8"> 8</label>
+</div>
 
-<h2>Oh</h2>
-<label><input type="checkbox" value="sons/vocalisations/oh_0.mp3" data-title="Oh 0"> 0</label>
-<label><input type="checkbox" value="sons/vocalisations/oh_1.mp3" data-title="Oh 1"> 1</label>
-<label><input type="checkbox" value="sons/vocalisations/oh_2.mp3" data-title="Oh 2"> 2</label>
-<label><input type="checkbox" value="sons/vocalisations/oh_3.mp3" data-title="Oh 3"> 3</label>
-<label><input type="checkbox" value="sons/vocalisations/oh_4.mp3" data-title="Oh 4"> 4</label>
-<label><input type="checkbox" value="sons/vocalisations/oh_5.mp3" data-title="Oh 5"> 5</label>
-<label><input type="checkbox" value="sons/vocalisations/oh_6.mp3" data-title="Oh 6"> 6</label>
+<div class="group">
+  <h3 class="group-title">Oh</h3>
+  <label><input type="checkbox" value="sons/vocalisations/oh_0.mp3" data-title="Oh 0"> 0</label>
+  <label><input type="checkbox" value="sons/vocalisations/oh_1.mp3" data-title="Oh 1"> 1</label>
+  <label><input type="checkbox" value="sons/vocalisations/oh_2.mp3" data-title="Oh 2"> 2</label>
+  <label><input type="checkbox" value="sons/vocalisations/oh_3.mp3" data-title="Oh 3"> 3</label>
+  <label><input type="checkbox" value="sons/vocalisations/oh_4.mp3" data-title="Oh 4"> 4</label>
+  <label><input type="checkbox" value="sons/vocalisations/oh_5.mp3" data-title="Oh 5"> 5</label>
+  <label><input type="checkbox" value="sons/vocalisations/oh_6.mp3" data-title="Oh 6"> 6</label>
+</div>
 
-<h2>Tac</h2>
-<label><input type="checkbox" value="sons/vocalisations/tac_0.mp3" data-title="Tac 0"> 0</label>
-<label><input type="checkbox" value="sons/vocalisations/tac_1.mp3" data-title="Tac 1"> 1</label>
-<label><input type="checkbox" value="sons/vocalisations/tac_2.mp3" data-title="Tac 2"> 2</label>
-<label><input type="checkbox" value="sons/vocalisations/tac_3.mp3" data-title="Tac 3"> 3</label>
-<label><input type="checkbox" value="sons/vocalisations/tac_4.mp3" data-title="Tac 4"> 4</label>
-<label><input type="checkbox" value="sons/vocalisations/tac_5.mp3" data-title="Tac 5"> 5</label>
-<label><input type="checkbox" value="sons/vocalisations/tac_6.mp3" data-title="Tac 6"> 6</label>
-<label><input type="checkbox" value="sons/vocalisations/tac_7.mp3" data-title="Tac 7"> 7</label>
-<label><input type="checkbox" value="sons/vocalisations/tac_8.mp3" data-title="Tac 8"> 8</label>
+<div class="group">
+  <h3 class="group-title">Tac</h3>
+  <label><input type="checkbox" value="sons/vocalisations/tac_0.mp3" data-title="Tac 0"> 0</label>
+  <label><input type="checkbox" value="sons/vocalisations/tac_1.mp3" data-title="Tac 1"> 1</label>
+  <label><input type="checkbox" value="sons/vocalisations/tac_2.mp3" data-title="Tac 2"> 2</label>
+  <label><input type="checkbox" value="sons/vocalisations/tac_3.mp3" data-title="Tac 3"> 3</label>
+  <label><input type="checkbox" value="sons/vocalisations/tac_4.mp3" data-title="Tac 4"> 4</label>
+  <label><input type="checkbox" value="sons/vocalisations/tac_5.mp3" data-title="Tac 5"> 5</label>
+  <label><input type="checkbox" value="sons/vocalisations/tac_6.mp3" data-title="Tac 6"> 6</label>
+  <label><input type="checkbox" value="sons/vocalisations/tac_7.mp3" data-title="Tac 7"> 7</label>
+  <label><input type="checkbox" value="sons/vocalisations/tac_8.mp3" data-title="Tac 8"> 8</label>
+</div>
 
-<h2>Vlan</h2>
-<label><input type="checkbox" value="sons/vocalisations/vlan_0.mp3" data-title="Vlan 0"> 0</label>
-<label><input type="checkbox" value="sons/vocalisations/vlan_1.mp3" data-title="Vlan 1"> 1</label>
-<label><input type="checkbox" value="sons/vocalisations/vlan_2.mp3" data-title="Vlan 2"> 2</label>
-<label><input type="checkbox" value="sons/vocalisations/vlan_3.mp3" data-title="Vlan 3"> 3</label>
-<label><input type="checkbox" value="sons/vocalisations/vlan_4.mp3" data-title="Vlan 4"> 4</label>
-<label><input type="checkbox" value="sons/vocalisations/vlan_5.mp3" data-title="Vlan 5"> 5</label>
+<div class="group">
+  <h3 class="group-title">Vlan</h3>
+  <label><input type="checkbox" value="sons/vocalisations/vlan_0.mp3" data-title="Vlan 0"> 0</label>
+  <label><input type="checkbox" value="sons/vocalisations/vlan_1.mp3" data-title="Vlan 1"> 1</label>
+  <label><input type="checkbox" value="sons/vocalisations/vlan_2.mp3" data-title="Vlan 2"> 2</label>
+  <label><input type="checkbox" value="sons/vocalisations/vlan_3.mp3" data-title="Vlan 3"> 3</label>
+  <label><input type="checkbox" value="sons/vocalisations/vlan_4.mp3" data-title="Vlan 4"> 4</label>
+  <label><input type="checkbox" value="sons/vocalisations/vlan_5.mp3" data-title="Vlan 5"> 5</label>
+</div>
 
-<h2>Waw</h2>
-<label><input type="checkbox" value="sons/vocalisations/waw_0.mp3" data-title="Waw 0"> 0</label>
-<label><input type="checkbox" value="sons/vocalisations/waw_1.mp3" data-title="Waw 1"> 1</label>
-<label><input type="checkbox" value="sons/vocalisations/waw_2.mp3" data-title="Waw 2"> 2</label>
-<label><input type="checkbox" value="sons/vocalisations/waw_3.mp3" data-title="Waw 3"> 3</label>
-<label><input type="checkbox" value="sons/vocalisations/waw_4.mp3" data-title="Waw 4"> 4</label>
-<label><input type="checkbox" value="sons/vocalisations/waw_5.mp3" data-title="Waw 5"> 5</label>
-<label><input type="checkbox" value="sons/vocalisations/waw_6.mp3" data-title="Waw 6"> 6</label>
-<label><input type="checkbox" value="sons/vocalisations/waw_7.mp3" data-title="Waw 7"> 7</label>
+<div class="group">
+  <h3 class="group-title">Waw</h3>
+  <label><input type="checkbox" value="sons/vocalisations/waw_0.mp3" data-title="Waw 0"> 0</label>
+  <label><input type="checkbox" value="sons/vocalisations/waw_1.mp3" data-title="Waw 1"> 1</label>
+  <label><input type="checkbox" value="sons/vocalisations/waw_2.mp3" data-title="Waw 2"> 2</label>
+  <label><input type="checkbox" value="sons/vocalisations/waw_3.mp3" data-title="Waw 3"> 3</label>
+  <label><input type="checkbox" value="sons/vocalisations/waw_4.mp3" data-title="Waw 4"> 4</label>
+  <label><input type="checkbox" value="sons/vocalisations/waw_5.mp3" data-title="Waw 5"> 5</label>
+  <label><input type="checkbox" value="sons/vocalisations/waw_6.mp3" data-title="Waw 6"> 6</label>
+  <label><input type="checkbox" value="sons/vocalisations/waw_7.mp3" data-title="Waw 7"> 7</label>
+</div>
 
 <button onclick="startPlaylist()">Écouter ma sélection</button>
 <button onclick="selectAll()">Tout sélectionner</button>
