@@ -8,7 +8,7 @@
   <style>
     body {
       font-family: Helvetica, Arial, sans-serif;
-      max-width: 720px;
+      max-width: 760px;
       margin: 40px auto;
       padding: 0 20px 90px;
       color: #111;
@@ -52,23 +52,41 @@
       font-weight: 800;
     }
 
-    label {
-      display: inline-block;
-      margin: 6px 14px 6px 0;
+    .sound {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin: 6px 12px 6px 0;
       font-size: 16px;
     }
 
-    input[type="checkbox"] {
-      margin-right: 6px;
+    .preview {
+      border: 1px solid #111;
+      background: #fff;
+      padding: 3px 7px;
+      cursor: pointer;
+      font-size: 13px;
     }
 
     button {
-      margin: 34px 10px 25px 0;
-      padding: 12px 16px;
+      margin: 8px 8px 8px 0;
+      padding: 10px 14px;
       border: 1px solid #111;
       background: white;
-      font-size: 16px;
+      font-size: 15px;
       cursor: pointer;
+    }
+
+    .controls {
+      margin-top: 40px;
+      padding-top: 24px;
+      border-top: 2px solid #111;
+    }
+
+    select {
+      padding: 8px;
+      font-size: 15px;
+      margin: 8px 0 18px;
     }
 
     audio {
@@ -80,6 +98,24 @@
       font-weight: bold;
       margin-top: 20px;
     }
+
+    .playlist-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #ddd;
+      padding: 10px 0;
+      gap: 12px;
+    }
+
+    .playlist-title {
+      flex: 1;
+    }
+
+    .small-button {
+      padding: 5px 8px;
+      font-size: 13px;
+    }
   </style>
 </head>
 
@@ -88,7 +124,7 @@
 <h1>Voiage de souvenirs<br>à vapeur</h1>
 
 <p>
-Choisissez un ou plusieurs fragments. Les sons sélectionnés se joueront automatiquement les uns après les autres.
+Choisissez des fragments, préécoutez-les si nécessaire, puis organisez votre propre ordre d’écoute.
 </p>
 
 <h2 class="category-title">Vocalisations</h2>
@@ -99,105 +135,207 @@ Fragments vocaux issus des ateliers. Chaque sélection compose une écoute diff�
 
 <div class="group">
   <h3 class="group-title">Berk</h3>
-  <label><input type="checkbox" value="sons/vocalisations/berk_0.mp3" data-title="Berk 0"> 0</label>
-  <label><input type="checkbox" value="sons/vocalisations/berk_1.mp3" data-title="Berk 1"> 1</label>
-  <label><input type="checkbox" value="sons/vocalisations/berk_2.mp3" data-title="Berk 2"> 2</label>
-  <label><input type="checkbox" value="sons/vocalisations/berk_3.mp3" data-title="Berk 3"> 3</label>
+  <span class="sound"><button class="preview" onclick="previewSound('sons/vocalisations/berk_0.mp3')">écouter</button><label><input type="checkbox" value="sons/vocalisations/berk_0.mp3" data-title="Berk 0" onchange="updatePlaylist()">0</label></span>
+  <span class="sound"><button class="preview" onclick="previewSound('sons/vocalisations/berk_1.mp3')">écouter</button><label><input type="checkbox" value="sons/vocalisations/berk_1.mp3" data-title="Berk 1" onchange="updatePlaylist()">1</label></span>
+  <span class="sound"><button class="preview" onclick="previewSound('sons/vocalisations/berk_2.mp3')">écouter</button><label><input type="checkbox" value="sons/vocalisations/berk_2.mp3" data-title="Berk 2" onchange="updatePlaylist()">2</label></span>
+  <span class="sound"><button class="preview" onclick="previewSound('sons/vocalisations/berk_3.mp3')">écouter</button><label><input type="checkbox" value="sons/vocalisations/berk_3.mp3" data-title="Berk 3" onchange="updatePlaylist()">3</label></span>
 </div>
 
 <div class="group">
   <h3 class="group-title">Bham</h3>
-  <label><input type="checkbox" value="sons/vocalisations/bham_0.mp3" data-title="Bham 0"> 0</label>
-  <label><input type="checkbox" value="sons/vocalisations/bham_1.mp3" data-title="Bham 1"> 1</label>
-  <label><input type="checkbox" value="sons/vocalisations/bham_2.mp3" data-title="Bham 2"> 2</label>
-  <label><input type="checkbox" value="sons/vocalisations/bham_3.mp3" data-title="Bham 3"> 3</label>
+  <span class="sound"><button class="preview" onclick="previewSound('sons/vocalisations/bham_0.mp3')">écouter</button><label><input type="checkbox" value="sons/vocalisations/bham_0.mp3" data-title="Bham 0" onchange="updatePlaylist()">0</label></span>
+  <span class="sound"><button class="preview" onclick="previewSound('sons/vocalisations/bham_1.mp3')">écouter</button><label><input type="checkbox" value="sons/vocalisations/bham_1.mp3" data-title="Bham 1" onchange="updatePlaylist()">1</label></span>
+  <span class="sound"><button class="preview" onclick="previewSound('sons/vocalisations/bham_2.mp3')">écouter</button><label><input type="checkbox" value="sons/vocalisations/bham_2.mp3" data-title="Bham 2" onchange="updatePlaylist()">2</label></span>
+  <span class="sound"><button class="preview" onclick="previewSound('sons/vocalisations/bham_3.mp3')">écouter</button><label><input type="checkbox" value="sons/vocalisations/bham_3.mp3" data-title="Bham 3" onchange="updatePlaylist()">3</label></span>
 </div>
 
 <div class="group">
   <h3 class="group-title">Ehi</h3>
-  <label><input type="checkbox" value="sons/vocalisations/ehi_0.mp3" data-title="Ehi 0"> 0</label>
-  <label><input type="checkbox" value="sons/vocalisations/ehi_1.mp3" data-title="Ehi 1"> 1</label>
-  <label><input type="checkbox" value="sons/vocalisations/ehi_2.mp3" data-title="Ehi 2"> 2</label>
-  <label><input type="checkbox" value="sons/vocalisations/ehi_3.mp3" data-title="Ehi 3"> 3</label>
+  <span class="sound"><button class="preview" onclick="previewSound('sons/vocalisations/ehi_0.mp3')">écouter</button><label><input type="checkbox" value="sons/vocalisations/ehi_0.mp3" data-title="Ehi 0" onchange="updatePlaylist()">0</label></span>
+  <span class="sound"><button class="preview" onclick="previewSound('sons/vocalisations/ehi_1.mp3')">écouter</button><label><input type="checkbox" value="sons/vocalisations/ehi_1.mp3" data-title="Ehi 1" onchange="updatePlaylist()">1</label></span>
+  <span class="sound"><button class="preview" onclick="previewSound('sons/vocalisations/ehi_2.mp3')">écouter</button><label><input type="checkbox" value="sons/vocalisations/ehi_2.mp3" data-title="Ehi 2" onchange="updatePlaylist()">2</label></span>
+  <span class="sound"><button class="preview" onclick="previewSound('sons/vocalisations/ehi_3.mp3')">écouter</button><label><input type="checkbox" value="sons/vocalisations/ehi_3.mp3" data-title="Ehi 3" onchange="updatePlaylist()">3</label></span>
 </div>
 
 <div class="group">
   <h3 class="group-title">Mm</h3>
-  <label><input type="checkbox" value="sons/vocalisations/mm_0.mp3" data-title="Mm 0"> 0</label>
-  <label><input type="checkbox" value="sons/vocalisations/mm_1.mp3" data-title="Mm 1"> 1</label>
-  <label><input type="checkbox" value="sons/vocalisations/mm_2.mp3" data-title="Mm 2"> 2</label>
-  <label><input type="checkbox" value="sons/vocalisations/mm_3.mp3" data-title="Mm 3"> 3</label>
-  <label><input type="checkbox" value="sons/vocalisations/mm_4.mp3" data-title="Mm 4"> 4</label>
-  <label><input type="checkbox" value="sons/vocalisations/mm_5.mp3" data-title="Mm 5"> 5</label>
-  <label><input type="checkbox" value="sons/vocalisations/mm_6.mp3" data-title="Mm 6"> 6</label>
-  <label><input type="checkbox" value="sons/vocalisations/mm_7.mp3" data-title="Mm 7"> 7</label>
-  <label><input type="checkbox" value="sons/vocalisations/mm_8.mp3" data-title="Mm 8"> 8</label>
+  <span class="sound"><button class="preview" onclick="previewSound('sons/vocalisations/mm_0.mp3')">écouter</button><label><input type="checkbox" value="sons/vocalisations/mm_0.mp3" data-title="Mm 0" onchange="updatePlaylist()">0</label></span>
+  <span class="sound"><button class="preview" onclick="previewSound('sons/vocalisations/mm_1.mp3')">écouter</button><label><input type="checkbox" value="sons/vocalisations/mm_1.mp3" data-title="Mm 1" onchange="updatePlaylist()">1</label></span>
+  <span class="sound"><button class="preview" onclick="previewSound('sons/vocalisations/mm_2.mp3')">écouter</button><label><input type="checkbox" value="sons/vocalisations/mm_2.mp3" data-title="Mm 2" onchange="updatePlaylist()">2</label></span>
+  <span class="sound"><button class="preview" onclick="previewSound('sons/vocalisations/mm_3.mp3')">écouter</button><label><input type="checkbox" value="sons/vocalisations/mm_3.mp3" data-title="Mm 3" onchange="updatePlaylist()">3</label></span>
+  <span class="sound"><button class="preview" onclick="previewSound('sons/vocalisations/mm_4.mp3')">écouter</button><label><input type="checkbox" value="sons/vocalisations/mm_4.mp3" data-title="Mm 4" onchange="updatePlaylist()">4</label></span>
+  <span class="sound"><button class="preview" onclick="previewSound('sons/vocalisations/mm_5.mp3')">écouter</button><label><input type="checkbox" value="sons/vocalisations/mm_5.mp3" data-title="Mm 5" onchange="updatePlaylist()">5</label></span>
+  <span class="sound"><button class="preview" onclick="previewSound('sons/vocalisations/mm_6.mp3')">écouter</button><label><input type="checkbox" value="sons/vocalisations/mm_6.mp3" data-title="Mm 6" onchange="updatePlaylist()">6</label></span>
+  <span class="sound"><button class="preview" onclick="previewSound('sons/vocalisations/mm_7.mp3')">écouter</button><label><input type="checkbox" value="sons/vocalisations/mm_7.mp3" data-title="Mm 7" onchange="updatePlaylist()">7</label></span>
+  <span class="sound"><button class="preview" onclick="previewSound('sons/vocalisations/mm_8.mp3')">écouter</button><label><input type="checkbox" value="sons/vocalisations/mm_8.mp3" data-title="Mm 8" onchange="updatePlaylist()">8</label></span>
 </div>
 
 <div class="group">
   <h3 class="group-title">Oh</h3>
-  <label><input type="checkbox" value="sons/vocalisations/oh_0.mp3" data-title="Oh 0"> 0</label>
-  <label><input type="checkbox" value="sons/vocalisations/oh_1.mp3" data-title="Oh 1"> 1</label>
-  <label><input type="checkbox" value="sons/vocalisations/oh_2.mp3" data-title="Oh 2"> 2</label>
-  <label><input type="checkbox" value="sons/vocalisations/oh_3.mp3" data-title="Oh 3"> 3</label>
-  <label><input type="checkbox" value="sons/vocalisations/oh_4.mp3" data-title="Oh 4"> 4</label>
-  <label><input type="checkbox" value="sons/vocalisations/oh_5.mp3" data-title="Oh 5"> 5</label>
-  <label><input type="checkbox" value="sons/vocalisations/oh_6.mp3" data-title="Oh 6"> 6</label>
+  <span class="sound"><button class="preview" onclick="previewSound('sons/vocalisations/oh_0.mp3')">écouter</button><label><input type="checkbox" value="sons/vocalisations/oh_0.mp3" data-title="Oh 0" onchange="updatePlaylist()">0</label></span>
+  <span class="sound"><button class="preview" onclick="previewSound('sons/vocalisations/oh_1.mp3')">écouter</button><label><input type="checkbox" value="sons/vocalisations/oh_1.mp3" data-title="Oh 1" onchange="updatePlaylist()">1</label></span>
+  <span class="sound"><button class="preview" onclick="previewSound('sons/vocalisations/oh_2.mp3')">écouter</button><label><input type="checkbox" value="sons/vocalisations/oh_2.mp3" data-title="Oh 2" onchange="updatePlaylist()">2</label></span>
+  <span class="sound"><button class="preview" onclick="previewSound('sons/vocalisations/oh_3.mp3')">écouter</button><label><input type="checkbox" value="sons/vocalisations/oh_3.mp3" data-title="Oh 3" onchange="updatePlaylist()">3</label></span>
+  <span class="sound"><button class="preview" onclick="previewSound('sons/vocalisations/oh_4.mp3')">écouter</button><label><input type="checkbox" value="sons/vocalisations/oh_4.mp3" data-title="Oh 4" onchange="updatePlaylist()">4</label></span>
+  <span class="sound"><button class="preview" onclick="previewSound('sons/vocalisations/oh_5.mp3')">écouter</button><label><input type="checkbox" value="sons/vocalisations/oh_5.mp3" data-title="Oh 5" onchange="updatePlaylist()">5</label></span>
+  <span class="sound"><button class="preview" onclick="previewSound('sons/vocalisations/oh_6.mp3')">écouter</button><label><input type="checkbox" value="sons/vocalisations/oh_6.mp3" data-title="Oh 6" onchange="updatePlaylist()">6</label></span>
 </div>
 
 <div class="group">
   <h3 class="group-title">Tac</h3>
-  <label><input type="checkbox" value="sons/vocalisations/tac_0.mp3" data-title="Tac 0"> 0</label>
-  <label><input type="checkbox" value="sons/vocalisations/tac_1.mp3" data-title="Tac 1"> 1</label>
-  <label><input type="checkbox" value="sons/vocalisations/tac_2.mp3" data-title="Tac 2"> 2</label>
-  <label><input type="checkbox" value="sons/vocalisations/tac_3.mp3" data-title="Tac 3"> 3</label>
-  <label><input type="checkbox" value="sons/vocalisations/tac_4.mp3" data-title="Tac 4"> 4</label>
-  <label><input type="checkbox" value="sons/vocalisations/tac_5.mp3" data-title="Tac 5"> 5</label>
-  <label><input type="checkbox" value="sons/vocalisations/tac_6.mp3" data-title="Tac 6"> 6</label>
-  <label><input type="checkbox" value="sons/vocalisations/tac_7.mp3" data-title="Tac 7"> 7</label>
-  <label><input type="checkbox" value="sons/vocalisations/tac_8.mp3" data-title="Tac 8"> 8</label>
+  <span class="sound"><button class="preview" onclick="previewSound('sons/vocalisations/tac_0.mp3')">écouter</button><label><input type="checkbox" value="sons/vocalisations/tac_0.mp3" data-title="Tac 0" onchange="updatePlaylist()">0</label></span>
+  <span class="sound"><button class="preview" onclick="previewSound('sons/vocalisations/tac_1.mp3')">écouter</button><label><input type="checkbox" value="sons/vocalisations/tac_1.mp3" data-title="Tac 1" onchange="updatePlaylist()">1</label></span>
+  <span class="sound"><button class="preview" onclick="previewSound('sons/vocalisations/tac_2.mp3')">écouter</button><label><input type="checkbox" value="sons/vocalisations/tac_2.mp3" data-title="Tac 2" onchange="updatePlaylist()">2</label></span>
+  <span class="sound"><button class="preview" onclick="previewSound('sons/vocalisations/tac_3.mp3')">écouter</button><label><input type="checkbox" value="sons/vocalisations/tac_3.mp3" data-title="Tac 3" onchange="updatePlaylist()">3</label></span>
+  <span class="sound"><button class="preview" onclick="previewSound('sons/vocalisations/tac_4.mp3')">écouter</button><label><input type="checkbox" value="sons/vocalisations/tac_4.mp3" data-title="Tac 4" onchange="updatePlaylist()">4</label></span>
+  <span class="sound"><button class="preview" onclick="previewSound('sons/vocalisations/tac_5.mp3')">écouter</button><label><input type="checkbox" value="sons/vocalisations/tac_5.mp3" data-title="Tac 5" onchange="updatePlaylist()">5</label></span>
+  <span class="sound"><button class="preview" onclick="previewSound('sons/vocalisations/tac_6.mp3')">écouter</button><label><input type="checkbox" value="sons/vocalisations/tac_6.mp3" data-title="Tac 6" onchange="updatePlaylist()">6</label></span>
+  <span class="sound"><button class="preview" onclick="previewSound('sons/vocalisations/tac_7.mp3')">écouter</button><label><input type="checkbox" value="sons/vocalisations/tac_7.mp3" data-title="Tac 7" onchange="updatePlaylist()">7</label></span>
+  <span class="sound"><button class="preview" onclick="previewSound('sons/vocalisations/tac_8.mp3')">écouter</button><label><input type="checkbox" value="sons/vocalisations/tac_8.mp3" data-title="Tac 8" onchange="updatePlaylist()">8</label></span>
 </div>
 
 <div class="group">
   <h3 class="group-title">Vlan</h3>
-  <label><input type="checkbox" value="sons/vocalisations/vlan_0.mp3" data-title="Vlan 0"> 0</label>
-  <label><input type="checkbox" value="sons/vocalisations/vlan_1.mp3" data-title="Vlan 1"> 1</label>
-  <label><input type="checkbox" value="sons/vocalisations/vlan_2.mp3" data-title="Vlan 2"> 2</label>
-  <label><input type="checkbox" value="sons/vocalisations/vlan_3.mp3" data-title="Vlan 3"> 3</label>
-  <label><input type="checkbox" value="sons/vocalisations/vlan_4.mp3" data-title="Vlan 4"> 4</label>
-  <label><input type="checkbox" value="sons/vocalisations/vlan_5.mp3" data-title="Vlan 5"> 5</label>
+  <span class="sound"><button class="preview" onclick="previewSound('sons/vocalisations/vlan_0.mp3')">écouter</button><label><input type="checkbox" value="sons/vocalisations/vlan_0.mp3" data-title="Vlan 0" onchange="updatePlaylist()">0</label></span>
+  <span class="sound"><button class="preview" onclick="previewSound('sons/vocalisations/vlan_1.mp3')">écouter</button><label><input type="checkbox" value="sons/vocalisations/vlan_1.mp3" data-title="Vlan 1" onchange="updatePlaylist()">1</label></span>
+  <span class="sound"><button class="preview" onclick="previewSound('sons/vocalisations/vlan_2.mp3')">écouter</button><label><input type="checkbox" value="sons/vocalisations/vlan_2.mp3" data-title="Vlan 2" onchange="updatePlaylist()">2</label></span>
+  <span class="sound"><button class="preview" onclick="previewSound('sons/vocalisations/vlan_3.mp3')">écouter</button><label><input type="checkbox" value="sons/vocalisations/vlan_3.mp3" data-title="Vlan 3" onchange="updatePlaylist()">3</label></span>
+  <span class="sound"><button class="preview" onclick="previewSound('sons/vocalisations/vlan_4.mp3')">écouter</button><label><input type="checkbox" value="sons/vocalisations/vlan_4.mp3" data-title="Vlan 4" onchange="updatePlaylist()">4</label></span>
+  <span class="sound"><button class="preview" onclick="previewSound('sons/vocalisations/vlan_5.mp3')">écouter</button><label><input type="checkbox" value="sons/vocalisations/vlan_5.mp3" data-title="Vlan 5" onchange="updatePlaylist()">5</label></span>
 </div>
 
 <div class="group">
   <h3 class="group-title">Waw</h3>
-  <label><input type="checkbox" value="sons/vocalisations/waw_0.mp3" data-title="Waw 0"> 0</label>
-  <label><input type="checkbox" value="sons/vocalisations/waw_1.mp3" data-title="Waw 1"> 1</label>
-  <label><input type="checkbox" value="sons/vocalisations/waw_2.mp3" data-title="Waw 2"> 2</label>
-  <label><input type="checkbox" value="sons/vocalisations/waw_3.mp3" data-title="Waw 3"> 3</label>
-  <label><input type="checkbox" value="sons/vocalisations/waw_4.mp3" data-title="Waw 4"> 4</label>
-  <label><input type="checkbox" value="sons/vocalisations/waw_5.mp3" data-title="Waw 5"> 5</label>
-  <label><input type="checkbox" value="sons/vocalisations/waw_6.mp3" data-title="Waw 6"> 6</label>
-  <label><input type="checkbox" value="sons/vocalisations/waw_7.mp3" data-title="Waw 7"> 7</label>
+  <span class="sound"><button class="preview" onclick="previewSound('sons/vocalisations/waw_0.mp3')">écouter</button><label><input type="checkbox" value="sons/vocalisations/waw_0.mp3" data-title="Waw 0" onchange="updatePlaylist()">0</label></span>
+  <span class="sound"><button class="preview" onclick="previewSound('sons/vocalisations/waw_1.mp3')">écouter</button><label><input type="checkbox" value="sons/vocalisations/waw_1.mp3" data-title="Waw 1" onchange="updatePlaylist()">1</label></span>
+  <span class="sound"><button class="preview" onclick="previewSound('sons/vocalisations/waw_2.mp3')">écouter</button><label><input type="checkbox" value="sons/vocalisations/waw_2.mp3" data-title="Waw 2" onchange="updatePlaylist()">2</label></span>
+  <span class="sound"><button class="preview" onclick="previewSound('sons/vocalisations/waw_3.mp3')">écouter</button><label><input type="checkbox" value="sons/vocalisations/waw_3.mp3" data-title="Waw 3" onchange="updatePlaylist()">3</label></span>
+  <span class="sound"><button class="preview" onclick="previewSound('sons/vocalisations/waw_4.mp3')">écouter</button><label><input type="checkbox" value="sons/vocalisations/waw_4.mp3" data-title="Waw 4" onchange="updatePlaylist()">4</label></span>
+  <span class="sound"><button class="preview" onclick="previewSound('sons/vocalisations/waw_5.mp3')">écouter</button><label><input type="checkbox" value="sons/vocalisations/waw_5.mp3" data-title="Waw 5" onchange="updatePlaylist()">5</label></span>
+  <span class="sound"><button class="preview" onclick="previewSound('sons/vocalisations/waw_6.mp3')">écouter</button><label><input type="checkbox" value="sons/vocalisations/waw_6.mp3" data-title="Waw 6" onchange="updatePlaylist()">6</label></span>
+  <span class="sound"><button class="preview" onclick="previewSound('sons/vocalisations/waw_7.mp3')">écouter</button><label><input type="checkbox" value="sons/vocalisations/waw_7.mp3" data-title="Waw 7" onchange="updatePlaylist()">7</label></span>
 </div>
 
-<button onclick="startPlaylist()">Écouter ma sélection</button>
-<button onclick="selectAll()">Tout sélectionner</button>
-<button onclick="clearAll()">Tout effacer</button>
+<div class="controls">
+  <label for="pause">Pause entre les sons</label><br>
+  <select id="pause">
+    <option value="0">aucune pause</option>
+    <option value="2000">2 secondes</option>
+    <option value="5000">5 secondes</option>
+    <option value="10000">10 secondes</option>
+    <option value="30000">30 secondes</option>
+  </select>
 
-<p id="nowPlaying"></p>
-<audio id="player" controls></audio>
+  <h2 class="category-title">Playlist</h2>
+  <p>Les sons sélectionnés apparaissent ici. Vous pouvez modifier leur ordre avant l’écoute.</p>
+
+  <div id="playlistList"></div>
+
+  <button onclick="startPlaylist()">Écouter la playlist</button>
+  <button onclick="shuffleSelected()">Mélanger l’ordre</button>
+  <button onclick="clearAll()">Tout effacer</button>
+
+  <p id="nowPlaying"></p>
+  <audio id="player" controls></audio>
+</div>
 
 <script>
 let playlist = [];
 let currentIndex = 0;
+let previewPlayer = new Audio();
 
-function startPlaylist() {
+function previewSound(src) {
+  const mainPlayer = document.getElementById("player");
+  mainPlayer.pause();
+
+  if (previewPlayer.src.includes(src) && !previewPlayer.paused) {
+    previewPlayer.pause();
+    previewPlayer.currentTime = 0;
+    return;
+  }
+
+  previewPlayer.pause();
+  previewPlayer = new Audio(src);
+  previewPlayer.play();
+}
+
+function updatePlaylist() {
   const checked = document.querySelectorAll('input[type="checkbox"]:checked');
 
-  playlist = Array.from(checked).map(item => ({
+  const oldOrder = playlist.map(item => item.src);
+
+  const selected = Array.from(checked).map(item => ({
     src: item.value,
     title: item.dataset.title
   }));
+
+  playlist = selected.sort((a, b) => {
+    const indexA = oldOrder.indexOf(a.src);
+    const indexB = oldOrder.indexOf(b.src);
+
+    if (indexA === -1 && indexB === -1) return 0;
+    if (indexA === -1) return 1;
+    if (indexB === -1) return -1;
+    return indexA - indexB;
+  });
+
+  renderPlaylist();
+}
+
+function renderPlaylist() {
+  const playlistList = document.getElementById("playlistList");
+  playlistList.innerHTML = "";
+
+  if (playlist.length === 0) {
+    playlistList.innerHTML = "<p>Aucun son sélectionné.</p>";
+    return;
+  }
+
+  playlist.forEach((item, index) => {
+    const div = document.createElement("div");
+    div.className = "playlist-item";
+
+    div.innerHTML = `
+      <span class="playlist-title">${index + 1}. ${item.title}</span>
+      <span>
+        <button class="small-button" onclick="moveUp(${index})">monter</button>
+        <button class="small-button" onclick="moveDown(${index})">descendre</button>
+        <button class="small-button" onclick="removeFromPlaylist('${item.src}')">retirer</button>
+      </span>
+    `;
+
+    playlistList.appendChild(div);
+  });
+}
+
+function moveUp(index) {
+  if (index === 0) return;
+  [playlist[index - 1], playlist[index]] = [playlist[index], playlist[index - 1]];
+  renderPlaylist();
+}
+
+function moveDown(index) {
+  if (index === playlist.length - 1) return;
+  [playlist[index + 1], playlist[index]] = [playlist[index], playlist[index + 1]];
+  renderPlaylist();
+}
+
+function removeFromPlaylist(src) {
+  const input = document.querySelector(`input[value="${src}"]`);
+  if (input) input.checked = false;
+  updatePlaylist();
+}
+
+function shuffleSelected() {
+  for (let i = playlist.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [playlist[i], playlist[j]] = [playlist[j], playlist[i]];
+  }
+  renderPlaylist();
+}
+
+function startPlaylist() {
+  previewPlayer.pause();
 
   if (playlist.length === 0) {
     alert("Choisissez au moins un son.");
@@ -219,20 +357,24 @@ function playCurrent() {
 
 document.getElementById("player").addEventListener("ended", function () {
   currentIndex++;
+
   if (currentIndex < playlist.length) {
-    playCurrent();
+    const pause = Number(document.getElementById("pause").value);
+    setTimeout(playCurrent, pause);
   } else {
     document.getElementById("nowPlaying").textContent = "Fin de la sélection.";
   }
 });
 
-function selectAll() {
-  document.querySelectorAll('input[type="checkbox"]').forEach(item => item.checked = true);
-}
-
 function clearAll() {
   document.querySelectorAll('input[type="checkbox"]').forEach(item => item.checked = false);
+  playlist = [];
+  renderPlaylist();
+  document.getElementById("nowPlaying").textContent = "";
+  document.getElementById("player").pause();
 }
+
+renderPlaylist();
 </script>
 
 </body>
