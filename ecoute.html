@@ -8,7 +8,7 @@
   <style>
     body {
       font-family: Helvetica, Arial, sans-serif;
-      max-width: 900px;
+      max-width: 760px;
       margin: 40px auto;
       padding: 0 20px 90px;
       color: #111;
@@ -39,14 +39,14 @@
     }
 
     .group {
-      margin: 26px 0 34px;
+      margin: 22px 0 26px;
       padding-left: 18px;
       border-left: 1px solid #111;
     }
 
     .group-title {
-      margin: 0 0 14px;
-      font-size: 15px;
+      margin: 0 0 10px;
+      font-size: 14px;
       text-transform: uppercase;
       letter-spacing: 0.08em;
       font-weight: 800;
@@ -55,34 +55,17 @@
     .sound {
       display: inline-flex;
       align-items: center;
-      gap: 8px;
-      margin: 8px 18px 8px 0;
+      gap: 6px;
+      margin: 6px 12px 6px 0;
       font-size: 16px;
-      white-space: nowrap;
     }
 
     .preview {
       border: 1px solid #111;
       background: #fff;
-      padding: 5px 9px;
+      padding: 3px 7px;
       cursor: pointer;
-      font-size: 14px;
-    }
-
-    .sound label {
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-    }
-
-    .sound-name {
-      font-weight: 600;
-    }
-
-    .duration {
-      color: #666;
-      font-size: 0.9em;
-      font-style: italic;
+      font-size: 13px;
     }
 
     button {
@@ -133,12 +116,6 @@
       padding: 5px 8px;
       font-size: 13px;
     }
-
-    .loop-control {
-      display: block;
-      margin: 18px 0 8px;
-      font-weight: bold;
-    }
   </style>
 </head>
 
@@ -173,11 +150,6 @@
 
   <div id="playlistList"></div>
 
-  <label class="loop-control">
-    <input type="checkbox" id="loopPlaylist">
-    Répéter la playlist en boucle
-  </label>
-
   <button onclick="startPlaylist()">Écouter la playlist</button>
   <button onclick="shuffleSelected()">Mélanger l’ordre</button>
   <button onclick="clearAll()">Tout effacer</button>
@@ -192,32 +164,28 @@ let currentIndex = 0;
 let previewPlayer = new Audio();
 
 const groups = [
-  { title: "Berk", folder: "sons/vocalisations", file: "berk", numbers: [0,1,2,3] },
-  { title: "Bham", folder: "sons/vocalisations", file: "bham", numbers: [0,1,2,3] },
+  { title: "Berk", folder: "sons/vocalisations", file: "berk", numbers: [0, 1, 2, 3] },
+  { title: "Bham", folder: "sons/vocalisations", file: "bham", numbers: [0, 1, 2, 3] },
   { title: "Cipcip", folder: "sons/vocalisations", file: "cipcip", numbers: [""] },
-  { title: "Eh vous", folder: "sons/vocalisations", file: "eh_vous", numbers: [0,1,2] },
-  { title: "Ehi", folder: "sons/vocalisations", file: "ehi", numbers: [0,1,2,3] },
-  { title: "Mm", folder: "sons/vocalisations", file: "mm", numbers: [0,1,2,3,4,5,6,7,8] },
-  { title: "Oh", folder: "sons/vocalisations", file: "oh", numbers: [0,1,2,3,4,5,6] },
-  { title: "Ta", folder: "sons/vocalisations", file: "ta", numbers: [0,1] },
+  { title: "Eh vous", folder: "sons/vocalisations", file: "eh_vous", numbers: [0, 1, 2] },
+  { title: "Ehi", folder: "sons/vocalisations", file: "ehi", numbers: [0, 1, 2, 3] },
+  { title: "Mm", folder: "sons/vocalisations", file: "mm", numbers: [0, 1, 2, 3, 4, 5, 6, 7, 8] },
+  { title: "Oh", folder: "sons/vocalisations", file: "oh", numbers: [0, 1, 2, 3, 4, 5, 6] },
+  { title: "Ta", folder: "sons/vocalisations", file: "ta", numbers: [0, 1] },
   { title: "Ti", folder: "sons/vocalisations", file: "ti", numbers: [""] },
   { title: "Tiquitic", folder: "sons/vocalisations", file: "tiquitic", numbers: [""] },
   { title: "Uh uh", folder: "sons/vocalisations", file: "uh_uh", numbers: [0] },
-  { title: "Tac", folder: "sons/vocalisations", file: "tac", numbers: [0,1,2,3,4,5,6,7,8] },
-  { title: "Vlan", folder: "sons/vocalisations", file: "vlan", numbers: [0,1,2,3,4,5] },
-  { title: "Waw", folder: "sons/vocalisations", file: "waw", numbers: [0,1,2,3,4,5,6,7] },
-  { title: "Bégayer", folder: "sons/begayer", file: "begayer", numbers: [0,1,2,3,4,5] },
-  { title: "Chant", folder: "sons/chant", file: "chant", numbers: [0,1,2] },
-  { title: "Description trajet — parlé", folder: "sons/description_trajet/parle", file: "trajet", numbers: [0,1,2,3,4] },
-  { title: "Description trajet — sonore", folder: "sons/description_trajet/sonore", file: "description_son", numbers: [0,1,2,3,4,5,6] },
-  { title: "Fragments parole", folder: "sons/fragments_parole", files: ["fragment_0.mp3","fragment_1.mp3","fragment_2.mp3","fragment_3.mp3","fragement_4.mp3"] },
-  { title: "Fusé", folder: "sons/fuse", file: "fuse", numbers: [0,1,2,3] },
-  { title: "Note tenue — A", folder: "sons/note_tenue", file: "a_tenue", numbers: [0,1,2] },
-  { title: "Note tenue — Bene", folder: "sons/note_tenue", file: "bene_tenu", numbers: [0,1] },
-  { title: "Note tenue — E", folder: "sons/note_tenue", file: "e_tenue", numbers: [0] },
-  { title: "Note tenue — E note", folder: "sons/note_tenue", file: "e_note_tenue", numbers: [1] },
-  { title: "Note tenue — Oh", folder: "sons/note_tenue", file: "oh_tenu", numbers: [0,1,2,3,4,5,6,7,8,9] },
-  { title: "Note tenue — Ok", folder: "sons/note_tenue", file: "ok_tenu", numbers: [0] }
+  { title: "Tac", folder: "sons/vocalisations", file: "tac", numbers: [0, 1, 2, 3, 4, 5, 6, 7, 8] },
+  { title: "Vlan", folder: "sons/vocalisations", file: "vlan", numbers: [0, 1, 2, 3, 4, 5] },
+  { title: "Waw", folder: "sons/vocalisations", file: "waw", numbers: [0, 1, 2, 3, 4, 5, 6, 7] },
+
+  {
+    title: "Bégayer",
+    description: "Sons plus articulés qui cherchent et sursautent.",
+    folder: "sons/bégayer",
+    file: "bégayer",
+    numbers: [1, 2, 3, 4, 5, 6]
+  }
 ];
 
 function audioPath(src) {
@@ -232,80 +200,76 @@ function renderSoundGroups() {
     const div = document.createElement("div");
     div.className = "group";
 
-    const title = document.createElement("h3");
-    title.className = "group-title";
-    title.textContent = group.title;
-    div.appendChild(title);
+    let html = `<h3 class="group-title">${group.title}</h3>`;
 
-    const soundFiles = group.files
-      ? group.files.map(fileName => ({
-          src: `${group.folder}/${fileName}`,
-          label: fileName.replace(".mp3", ""),
-          display: fileName.replace(".mp3", "")
-        }))
-      : group.numbers.map(number => ({
-          src: number === "" ? `${group.folder}/${group.file}.mp3` : `${group.folder}/${group.file}_${number}.mp3`,
-          label: number === "" ? group.title : `${group.title} ${number}`,
-          display: number === "" ? group.title : number
-        }));
+    if (group.description) {
+      html += `<p class="group-description">${group.description}</p>`;
+    }
 
-    soundFiles.forEach(sound => {
-      const span = document.createElement("span");
-      span.className = "sound";
+    group.numbers.forEach(number => {
+      const src = number === ""
+        ? `${group.folder}/${group.file}.mp3`
+        : `${group.folder}/${group.file}_${number}.mp3`;
 
-      const button = document.createElement("button");
-      button.className = "preview";
-      button.textContent = "écouter";
-      button.addEventListener("click", () => previewSound(sound.src));
+      const label = number === ""
+        ? group.title
+        : `${group.title} ${number}`;
 
-      const label = document.createElement("label");
-
-      const checkbox = document.createElement("input");
-      checkbox.type = "checkbox";
-      checkbox.value = sound.src;
-      checkbox.dataset.title = sound.label;
-      checkbox.addEventListener("change", updatePlaylist);
-
-      const name = document.createElement("span");
-      name.className = "sound-name";
-      name.textContent = sound.display;
-
-      const duration = document.createElement("span");
-      duration.className = "duration";
-      duration.dataset.src = sound.src;
-      duration.textContent = " (durée...)";
-
-      label.appendChild(checkbox);
-      label.appendChild(name);
-      label.appendChild(duration);
-
-      span.appendChild(button);
-      span.appendChild(label);
-      div.appendChild(span);
+      html += `
+        <span class="sound">
+          <button class="preview" onclick="previewSound('${src}')">écouter</button>
+          <label>
+            <input type="checkbox" value="${src}" data-title="${label}" onchange="updatePlaylist()">
+            ${number === "" ? "son" : number}
+          </label>
+        </span>
+      `;
     });
 
+    div.innerHTML = html;
     container.appendChild(div);
   });
 }
 
 function previewSound(src) {
-  document.getElementById("player").pause();
+  const mainPlayer = document.getElementById("player");
+  mainPlayer.pause();
+
+  const encodedSrc = audioPath(src);
+
+  if (previewPlayer.src.includes(encodedSrc) && !previewPlayer.paused) {
+    previewPlayer.pause();
+    previewPlayer.currentTime = 0;
+    return;
+  }
 
   previewPlayer.pause();
-  previewPlayer = new Audio(audioPath(src));
+  previewPlayer = new Audio(encodedSrc);
 
-  previewPlayer.play().catch(() => {
+  previewPlayer.play().catch(function(error) {
+    console.error("Impossible de lire le son :", encodedSrc, error);
     alert("Impossible de lire le fichier : " + src);
   });
 }
 
 function updatePlaylist() {
   const checked = document.querySelectorAll('input[type="checkbox"]:checked');
+  const oldOrder = playlist.map(item => item.src);
 
-  playlist = Array.from(checked).map(item => ({
+  const selected = Array.from(checked).map(item => ({
     src: item.value,
     title: item.dataset.title
   }));
+
+  playlist = selected.sort((a, b) => {
+    const indexA = oldOrder.indexOf(a.src);
+    const indexB = oldOrder.indexOf(b.src);
+
+    if (indexA === -1 && indexB === -1) return 0;
+    if (indexA === -1) return 1;
+    if (indexB === -1) return -1;
+    return indexA - indexB;
+  });
 
   renderPlaylist();
 }
@@ -322,6 +286,7 @@ function renderPlaylist() {
   playlist.forEach((item, index) => {
     const div = document.createElement("div");
     div.className = "playlist-item";
+
     div.innerHTML = `
       <span class="playlist-title">${index + 1}. ${item.title}</span>
       <span>
@@ -330,6 +295,7 @@ function renderPlaylist() {
         <button class="small-button" onclick="removeFromPlaylist('${item.src}')">retirer</button>
       </span>
     `;
+
     playlistList.appendChild(div);
   });
 }
@@ -357,6 +323,7 @@ function shuffleSelected() {
     const j = Math.floor(Math.random() * (i + 1));
     [playlist[i], playlist[j]] = [playlist[j], playlist[i]];
   }
+
   renderPlaylist();
 }
 
@@ -379,7 +346,8 @@ function playCurrent() {
   player.src = audioPath(playlist[currentIndex].src);
   nowPlaying.textContent = "En écoute : " + playlist[currentIndex].title;
 
-  player.play().catch(() => {
+  player.play().catch(function(error) {
+    console.error("Impossible de lire le son :", playlist[currentIndex].src, error);
     alert("Impossible de lire le fichier : " + playlist[currentIndex].src);
   });
 }
@@ -387,38 +355,13 @@ function playCurrent() {
 document.getElementById("player").addEventListener("ended", function () {
   currentIndex++;
 
-  const pause = Number(document.getElementById("pause").value);
-
   if (currentIndex < playlist.length) {
-    setTimeout(playCurrent, pause);
-  } else if (document.getElementById("loopPlaylist").checked) {
-    currentIndex = 0;
+    const pause = Number(document.getElementById("pause").value);
     setTimeout(playCurrent, pause);
   } else {
     document.getElementById("nowPlaying").textContent = "Fin de la sélection.";
   }
 });
-
-function loadDurations() {
-  document.querySelectorAll(".duration").forEach(span => {
-    const audio = new Audio(audioPath(span.dataset.src));
-
-    audio.addEventListener("loadedmetadata", function () {
-      const minutes = Math.floor(audio.duration / 60);
-      const seconds = Math.floor(audio.duration % 60);
-
-      if (minutes === 0) {
-        span.textContent = ` (${seconds} s)`;
-      } else {
-        span.textContent = ` (${minutes} min ${seconds} s)`;
-      }
-    });
-
-    audio.addEventListener("error", function () {
-      span.textContent = " (durée inconnue)";
-    });
-  });
-}
 
 function clearAll() {
   document.querySelectorAll('input[type="checkbox"]').forEach(item => item.checked = false);
@@ -429,7 +372,6 @@ function clearAll() {
 }
 
 renderSoundGroups();
-loadDurations();
 renderPlaylist();
 </script>
 
