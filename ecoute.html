@@ -67,12 +67,14 @@
       padding: 5px 9px;
       cursor: pointer;
       font-size: 14px;
+      transition: 0.2s;
     }
 
-    .sound label {
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
+    .preview.active,
+    .add-sound.active {
+      background: #2d6cdf;
+      color: white;
+      border-color: #2d6cdf;
     }
 
     .sound-number {
@@ -152,7 +154,8 @@
 <h1>Voiage de souvenirs<br>à vapeur</h1>
 
 <p>
-  Choisissez des fragments, préécoutez-les si nécessaire, puis ajoutez-les à votre playlist. Un même son peut être ajouté plusieurs fois.
+  Choisissez des fragments, préécoutez-les si nécessaire, puis ajoutez-les à votre playlist.
+  Un même son peut être ajouté plusieurs fois.
 </p>
 
 <h2 class="category-title">Vocalisations</h2>
@@ -197,6 +200,7 @@
 let playlist = [];
 let currentIndex = 0;
 let previewPlayer = new Audio();
+let activePreviewButton = null;
 
 const groups = [
   { title: "Berk", folder: "sons/vocalisations", file: "berk", numbers: [0, 1, 2, 3] },
@@ -272,15 +276,15 @@ function renderSoundGroups() {
       const span = document.createElement("span");
       span.className = "sound";
 
-      const button = document.createElement("button");
-      button.className = "preview";
-      button.textContent = "écouter";
-      button.addEventListener("click", () => previewSound(sound.src));
+      const previewButton = document.createElement("button");
+      previewButton.className = "preview";
+      previewButton.textContent = "écouter";
+      previewButton.addEventListener("click", () => previewSound(sound.src, previewButton));
 
       const addButton = document.createElement("button");
       addButton.className = "add-sound";
       addButton.textContent = "ajouter";
-      addButton.addEventListener("click", () => addToPlaylist(sound));
+      addButton.addEventListener("click", () => addToPlaylist(sound, addButton));
 
       const number = document.createElement("span");
       number.className = "sound-number";
@@ -291,7 +295,7 @@ function renderSoundGroups() {
       duration.dataset.src = sound.src;
       duration.textContent = "(durée...)";
 
-      span.appendChild(button);
+      span.appendChild(previewButton);
       span.appendChild(addButton);
       span.appendChild(number);
       span.appendChild(duration);
@@ -302,7 +306,7 @@ function renderSoundGroups() {
   });
 }
 
-function previewSound(src) {
+function previewSound(src, button) {
   const mainPlayer = document.getElementById("player");
   mainPlayer.pause();
 
@@ -311,22 +315,51 @@ function previewSound(src) {
   if (previewPlayer.src.includes(encodedSrc) && !previewPlayer.paused) {
     previewPlayer.pause();
     previewPlayer.currentTime = 0;
+
+    if (activePreviewButton) {
+      activePreviewButton.classList.remove("active");
+      activePreviewButton = null;
+    }
+
     return;
+  }
+
+  if (activePreviewButton) {
+    activePreviewButton.classList.remove("active");
   }
 
   previewPlayer.pause();
   previewPlayer = new Audio(encodedSrc);
 
+  activePreviewButton = button;
+  button.classList.add("active");
+
+  previewPlayer.addEventListener("ended", function () {
+    button.classList.remove("active");
+    activePreviewButton = null;
+  });
+
+  previewPlayer.addEventListener("pause", function () {
+    button.classList.remove("active");
+  });
+
   previewPlayer.play().catch(function () {
+    button.classList.remove("active");
     alert("Impossible de lire le fichier : " + src);
   });
 }
 
-function addToPlaylist(sound) {
+function addToPlaylist(sound, button) {
   playlist.push({
     src: sound.src,
     title: sound.title
   });
+
+  button.classList.add("active");
+
+  setTimeout(function () {
+    button.classList.remove("active");
+  }, 300);
 
   renderPlaylist();
 }
@@ -404,6 +437,11 @@ function shuffleSelected() {
 function startPlaylist() {
   previewPlayer.pause();
 
+  if (activePreviewButton) {
+    activePreviewButton.classList.remove("active");
+    activePreviewButton = null;
+  }
+
   if (playlist.length === 0) {
     alert("Choisissez au moins un son.");
     return;
@@ -472,6 +510,11 @@ function clearAll() {
   renderPlaylist();
   document.getElementById("nowPlaying").textContent = "";
   document.getElementById("player").pause();
+
+  if (activePreviewButton) {
+    activePreviewButton.classList.remove("active");
+    activePreviewButton = null;
+  }
 }
 
 renderSoundGroups();
