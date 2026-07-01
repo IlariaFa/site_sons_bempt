@@ -221,6 +221,7 @@ function renderSoundGroups() {
           <label>
             <input type="checkbox" value="${src}" data-title="${label}" onchange="updatePlaylist()">
             ${number === "" ? "son" : number}
+            <span class="duration" data-src="${src}">...</span>
           </label>
         </span>
       `;
@@ -351,7 +352,21 @@ function playCurrent() {
     alert("Impossible de lire le fichier : " + playlist[currentIndex].src);
   });
 }
+function loadDurations() {
+  document.querySelectorAll(".duration").forEach(span => {
+    const audio = new Audio(audioPath(span.dataset.src));
 
+    audio.addEventListener("loadedmetadata", function () {
+      const minutes = Math.floor(audio.duration / 60);
+      const seconds = Math.floor(audio.duration % 60);
+      span.textContent = ` — ${minutes}:${seconds.toString().padStart(2, "0")}`;
+    });
+
+    audio.addEventListener("error", function () {
+      span.textContent = " — ?";
+    });
+  });
+}
 document.getElementById("player").addEventListener("ended", function () {
   currentIndex++;
 
@@ -372,6 +387,7 @@ function clearAll() {
 }
 
 renderSoundGroups();
+loadDurations();
 renderPlaylist();
 </script>
 
