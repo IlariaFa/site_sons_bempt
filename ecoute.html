@@ -154,7 +154,10 @@
   <p>Les sons sélectionnés apparaissent ici. Vous pouvez modifier leur ordre avant l’écoute.</p>
 
   <div id="playlistList"></div>
-
+  <label>
+  <input type="checkbox" id="loopPlaylist">
+  mettre la sélection en boucle
+   </label>
   <button onclick="startPlaylist()">Écouter la playlist</button>
   <button onclick="shuffleSelected()">Mélanger l’ordre</button>
   <button onclick="clearAll()">Tout effacer</button>
@@ -451,9 +454,15 @@ document.getElementById("player").addEventListener("ended", function () {
   if (currentIndex < playlist.length) {
     const pause = Number(document.getElementById("pause").value);
     setTimeout(playCurrent, pause);
+  } } else {
+  if (document.getElementById("loopPlaylist").checked) {
+    currentIndex = 0;
+    const pause = Number(document.getElementById("pause").value);
+    setTimeout(playCurrent, pause);
   } else {
     document.getElementById("nowPlaying").textContent = "Fin de la sélection.";
   }
+}
 });
 
 function clearAll() {
