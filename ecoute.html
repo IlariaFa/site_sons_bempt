@@ -166,12 +166,19 @@ let previewPlayer = new Audio();
 const groups = [
   { title: "Berk", folder: "sons/vocalisations", file: "berk", numbers: [0, 1, 2, 3] },
   { title: "Bham", folder: "sons/vocalisations", file: "bham", numbers: [0, 1, 2, 3] },
+  { title: "Cipcip", folder: "sons/vocalisations", file: "cipcip", numbers: [""] },
+  { title: "Eh vous", folder: "sons/vocalisations", file: "eh_vous", numbers: [0, 1, 2] },
   { title: "Ehi", folder: "sons/vocalisations", file: "ehi", numbers: [0, 1, 2, 3] },
   { title: "Mm", folder: "sons/vocalisations", file: "mm", numbers: [0, 1, 2, 3, 4, 5, 6, 7, 8] },
   { title: "Oh", folder: "sons/vocalisations", file: "oh", numbers: [0, 1, 2, 3, 4, 5, 6] },
+  { title: "Ta", folder: "sons/vocalisations", file: "ta", numbers: [0, 1] },
+  { title: "Ti", folder: "sons/vocalisations", file: "ti", numbers: [""] },
+  { title: "Tiquitic", folder: "sons/vocalisations", file: "tiquitic", numbers: [""] },
+  { title: "Uh uh", folder: "sons/vocalisations", file: "uh_uh", numbers: [0] },
   { title: "Tac", folder: "sons/vocalisations", file: "tac", numbers: [0, 1, 2, 3, 4, 5, 6, 7, 8] },
   { title: "Vlan", folder: "sons/vocalisations", file: "vlan", numbers: [0, 1, 2, 3, 4, 5] },
   { title: "Waw", folder: "sons/vocalisations", file: "waw", numbers: [0, 1, 2, 3, 4, 5, 6, 7] },
+
   {
     title: "Bégayer",
     description: "Sons plus articulés qui cherchent et sursautent.",
@@ -200,15 +207,20 @@ function renderSoundGroups() {
     }
 
     group.numbers.forEach(number => {
-      const src = `${group.folder}/${group.file}_${number}.mp3`;
-      const label = `${group.title} ${number}`;
+      const src = number === ""
+        ? `${group.folder}/${group.file}.mp3`
+        : `${group.folder}/${group.file}_${number}.mp3`;
+
+      const label = number === ""
+        ? group.title
+        : `${group.title} ${number}`;
 
       html += `
         <span class="sound">
           <button class="preview" onclick="previewSound('${src}')">écouter</button>
           <label>
             <input type="checkbox" value="${src}" data-title="${label}" onchange="updatePlaylist()">
-            ${number}
+            ${number === "" ? "son" : number}
           </label>
         </span>
       `;
