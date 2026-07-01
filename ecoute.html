@@ -82,7 +82,12 @@
       padding-top: 24px;
       border-top: 2px solid #111;
     }
-
+    
+    .duration {
+    color: #666;
+    font-size: 0.9em;
+    font-style: italic;
+}
     select {
       padding: 8px;
       font-size: 15px;
@@ -358,8 +363,15 @@ function loadDurations() {
 
     audio.addEventListener("loadedmetadata", function () {
       const minutes = Math.floor(audio.duration / 60);
-      const seconds = Math.floor(audio.duration % 60);
-      span.textContent = ` — ${minutes}:${seconds.toString().padStart(2, "0")}`;
+const seconds = Math.floor(audio.duration % 60);
+
+if (minutes === 0) {
+  span.textContent = ` (${seconds} s)`;
+} else if (minutes === 1) {
+  span.textContent = ` (1 min ${seconds} s)`;
+} else {
+  span.textContent = ` (${minutes} min ${seconds} s)`;
+}
     });
 
     audio.addEventListener("error", function () {
