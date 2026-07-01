@@ -184,12 +184,73 @@ const groups = [
   { title: "Vlan", folder: "sons/vocalisations", file: "vlan", numbers: [0, 1, 2, 3, 4, 5] },
   { title: "Waw", folder: "sons/vocalisations", file: "waw", numbers: [0, 1, 2, 3, 4, 5, 6, 7] },
 
+  { title: "Bégayer", folder: "sons/begayer", file: "begayer", numbers: [0, 1, 2, 3, 4, 5] },
+
+  { title: "Chant", folder: "sons/chant", file: "chant", numbers: [0, 1, 2] },
+
   {
-    title: "Begayer",
-    description: "Sons plus articulés qui cherchent et sursautent.",
-    folder: "sons/begayer",
-    file: "begayer",
-    numbers: [0,1, 2, 3, 4, 5]
+    title: "Description trajet — parlé",
+    folder: "sons/description_trajet/parlé",
+    file: "trajet",
+    numbers: [0, 1, 2, 3, 4]
+  },
+
+  {
+    title: "Description trajet — sonore",
+    folder: "sons/description_trajet/sonore",
+    file: "description_son",
+    numbers: [0, 1, 2, 3, 4, 5, 6]
+  },
+
+  {
+    title: "Fragments parole",
+    folder: "sons/fragments_parole",
+    files: [
+      "fragment_0.mp3",
+      "fragment_1.mp3",
+      "fragment_2.mp3",
+      "fragment_3.mp3",
+      "fragement_4.mp3"
+    ]
+  },
+
+  { title: "Fusé", folder: "sons/fusé", file: "fuse", numbers: [0, 1, 2, 3] },
+
+  {
+    title: "Note tenue — A",
+    folder: "sons/note_tenue",
+    file: "a_tenue",
+    numbers: [0, 1, 2]
+  },
+  {
+    title: "Note tenue — Bene",
+    folder: "sons/note_tenue",
+    file: "bene_tenu",
+    numbers: [0, 1]
+  },
+  {
+    title: "Note tenue — E",
+    folder: "sons/note_tenue",
+    file: "e_tenue",
+    numbers: [0]
+  },
+  {
+    title: "Note tenue — E note",
+    folder: "sons/note_tenue",
+    file: "e_note_tenue",
+    numbers: [1]
+  },
+  {
+    title: "Note tenue — Oh",
+    folder: "sons/note_tenue",
+    file: "oh_tenu",
+    numbers: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+  },
+  {
+    title: "Note tenue — Ok",
+    folder: "sons/note_tenue",
+    file: "ok_tenu",
+    numbers: [0]
   }
 ];
 
@@ -211,26 +272,31 @@ function renderSoundGroups() {
       html += `<p class="group-description">${group.description}</p>`;
     }
 
-    group.numbers.forEach(number => {
-      const src = number === ""
+const soundFiles = group.files
+  ? group.files.map(fileName => ({
+      src: `${group.folder}/${fileName}`,
+      label: fileName.replace(".mp3", "")
+    }))
+  : group.numbers.map(number => ({
+      src: number === ""
         ? `${group.folder}/${group.file}.mp3`
-        : `${group.folder}/${group.file}_${number}.mp3`;
+        : `${group.folder}/${group.file}_${number}.mp3`,
+      label: number === "" ? group.title : `${group.title} ${number}`,
+      display: number === "" ? "son" : number
+    }));
 
-      const label = number === ""
-        ? group.title
-        : `${group.title} ${number}`;
-
-      html += `
-        <span class="sound">
-          <button class="preview" onclick="previewSound('${src}')">écouter</button>
-          <label>
-            <input type="checkbox" value="${src}" data-title="${label}" onchange="updatePlaylist()">
-            ${number === "" ? "son" : number}
-            <span class="duration" data-src="${src}">...</span>
-          </label>
-        </span>
-      `;
-    });
+soundFiles.forEach(sound => {
+  html += `
+    <span class="sound">
+      <button class="preview" onclick="previewSound('${sound.src}')">écouter</button>
+      <label>
+        <input type="checkbox" value="${sound.src}" data-title="${sound.label}" onchange="updatePlaylist()">
+        ${sound.display || sound.label}
+        <span class="duration" data-src="${sound.src}"> (durée...)</span>
+      </label>
+    </span>
+  `;
+});
 
     div.innerHTML = html;
     container.appendChild(div);
