@@ -8,7 +8,7 @@
   <style>
     body {
       font-family: Helvetica, Arial, sans-serif;
-      max-width: 760px;
+      max-width: 900px;
       margin: 40px auto;
       padding: 0 20px 90px;
       color: #111;
@@ -39,14 +39,14 @@
     }
 
     .group {
-      margin: 22px 0 26px;
+      margin: 26px 0 34px;
       padding-left: 18px;
       border-left: 1px solid #111;
     }
 
     .group-title {
-      margin: 0 0 10px;
-      font-size: 14px;
+      margin: 0 0 14px;
+      font-size: 15px;
       text-transform: uppercase;
       letter-spacing: 0.08em;
       font-weight: 800;
@@ -55,17 +55,34 @@
     .sound {
       display: inline-flex;
       align-items: center;
-      gap: 6px;
-      margin: 6px 12px 6px 0;
+      gap: 8px;
+      margin: 8px 18px 8px 0;
       font-size: 16px;
+      white-space: nowrap;
     }
 
     .preview {
       border: 1px solid #111;
       background: #fff;
-      padding: 3px 7px;
+      padding: 5px 9px;
       cursor: pointer;
-      font-size: 13px;
+      font-size: 14px;
+    }
+
+    .sound label {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .sound-name {
+      font-weight: 600;
+    }
+
+    .duration {
+      color: #666;
+      font-size: 0.9em;
+      font-style: italic;
     }
 
     button {
@@ -82,12 +99,7 @@
       padding-top: 24px;
       border-top: 2px solid #111;
     }
-    
-    .duration {
-    color: #666;
-    font-size: 0.9em;
-    font-style: italic;
-}
+
     select {
       padding: 8px;
       font-size: 15px;
@@ -120,6 +132,12 @@
     .small-button {
       padding: 5px 8px;
       font-size: 13px;
+    }
+
+    .loop-control {
+      display: block;
+      margin: 18px 0 8px;
+      font-weight: bold;
     }
   </style>
 </head>
@@ -154,10 +172,12 @@
   <p>Les sons sélectionnés apparaissent ici. Vous pouvez modifier leur ordre avant l’écoute.</p>
 
   <div id="playlistList"></div>
-  <label>
-  <input type="checkbox" id="loopPlaylist">
-  mettre la sélection en boucle
-   </label>
+
+  <label class="loop-control">
+    <input type="checkbox" id="loopPlaylist">
+    Répéter la playlist en boucle
+  </label>
+
   <button onclick="startPlaylist()">Écouter la playlist</button>
   <button onclick="shuffleSelected()">Mélanger l’ordre</button>
   <button onclick="clearAll()">Tout effacer</button>
@@ -188,12 +208,11 @@ const groups = [
   { title: "Waw", folder: "sons/vocalisations", file: "waw", numbers: [0, 1, 2, 3, 4, 5, 6, 7] },
 
   { title: "Bégayer", folder: "sons/begayer", file: "begayer", numbers: [0, 1, 2, 3, 4, 5] },
-
   { title: "Chant", folder: "sons/chant", file: "chant", numbers: [0, 1, 2] },
 
   {
     title: "Description trajet — parlé",
-    folder: "sons/description_trajet/parlé",
+    folder: "sons/description_trajet/parle",
     file: "trajet",
     numbers: [0, 1, 2, 3, 4]
   },
@@ -219,42 +238,12 @@ const groups = [
 
   { title: "Fusé", folder: "sons/fuse", file: "fuse", numbers: [0, 1, 2, 3] },
 
-  {
-    title: "Note tenue — A",
-    folder: "sons/note_tenue",
-    file: "a_tenue",
-    numbers: [0, 1, 2]
-  },
-  {
-    title: "Note tenue — Bene",
-    folder: "sons/note_tenue",
-    file: "bene_tenu",
-    numbers: [0, 1]
-  },
-  {
-    title: "Note tenue — E",
-    folder: "sons/note_tenue",
-    file: "e_tenue",
-    numbers: [0]
-  },
-  {
-    title: "Note tenue — E note",
-    folder: "sons/note_tenue",
-    file: "e_note_tenue",
-    numbers: [1]
-  },
-  {
-    title: "Note tenue — Oh",
-    folder: "sons/note_tenue",
-    file: "oh_tenu",
-    numbers: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
-  },
-  {
-    title: "Note tenue — Ok",
-    folder: "sons/note_tenue",
-    file: "ok_tenu",
-    numbers: [0]
-  }
+  { title: "Note tenue — A", folder: "sons/note_tenue", file: "a_tenue", numbers: [0, 1, 2] },
+  { title: "Note tenue — Bene", folder: "sons/note_tenue", file: "bene_tenu", numbers: [0, 1] },
+  { title: "Note tenue — E", folder: "sons/note_tenue", file: "e_tenue", numbers: [0] },
+  { title: "Note tenue — E note", folder: "sons/note_tenue", file: "e_note_tenue", numbers: [1] },
+  { title: "Note tenue — Oh", folder: "sons/note_tenue", file: "oh_tenu", numbers: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9] },
+  { title: "Note tenue — Ok", folder: "sons/note_tenue", file: "ok_tenu", numbers: [0] }
 ];
 
 function audioPath(src) {
@@ -275,31 +264,32 @@ function renderSoundGroups() {
       html += `<p class="group-description">${group.description}</p>`;
     }
 
-const soundFiles = group.files
-  ? group.files.map(fileName => ({
-      src: `${group.folder}/${fileName}`,
-      label: fileName.replace(".mp3", "")
-    }))
-  : group.numbers.map(number => ({
-      src: number === ""
-        ? `${group.folder}/${group.file}.mp3`
-        : `${group.folder}/${group.file}_${number}.mp3`,
-      label: number === "" ? group.title : `${group.title} ${number}`,
-      display: number === "" ? "son" : number
-    }));
+    const soundFiles = group.files
+      ? group.files.map(fileName => ({
+          src: `${group.folder}/${fileName}`,
+          label: fileName.replace(".mp3", ""),
+          display: fileName.replace(".mp3", "")
+        }))
+      : group.numbers.map(number => ({
+          src: number === ""
+            ? `${group.folder}/${group.file}.mp3`
+            : `${group.folder}/${group.file}_${number}.mp3`,
+          label: number === "" ? group.title : `${group.title} ${number}`,
+          display: number === "" ? group.title : number
+        }));
 
-soundFiles.forEach(sound => {
-  html += `
-    <span class="sound">
-      <button class="preview" onclick="previewSound('${sound.src}')">écouter</button>
-      <label>
-        <input type="checkbox" value="${sound.src}" data-title="${sound.label}" onchange="updatePlaylist()">
-        ${sound.display || sound.label}
-        <span class="duration" data-src="${sound.src}"> (durée...)</span>
-      </label>
-    </span>
-  `;
-});
+    soundFiles.forEach(sound => {
+      html += `
+        <span class="sound">
+          <button class="preview" onclick="previewSound('${sound.src}')">écouter</button>
+          <label>
+            <input type="checkbox" value="${sound.src}" data-title="${sound.label}" onchange="updatePlaylist()">
+            <span class="sound-name">${sound.display}</span>
+            <span class="duration" data-src="${sound.src}">(durée...)</span>
+          </label>
+        </span>
+      `;
+    });
 
     div.innerHTML = html;
     container.appendChild(div);
@@ -426,43 +416,43 @@ function playCurrent() {
     alert("Impossible de lire le fichier : " + playlist[currentIndex].src);
   });
 }
+
 function loadDurations() {
   document.querySelectorAll(".duration").forEach(span => {
     const audio = new Audio(audioPath(span.dataset.src));
 
     audio.addEventListener("loadedmetadata", function () {
       const minutes = Math.floor(audio.duration / 60);
-const seconds = Math.floor(audio.duration % 60);
+      const seconds = Math.floor(audio.duration % 60);
 
-if (minutes === 0) {
-  span.textContent = ` (${seconds} s)`;
-} else if (minutes === 1) {
-  span.textContent = ` (1 min ${seconds} s)`;
-} else {
-  span.textContent = ` (${minutes} min ${seconds} s)`;
-}
+      if (minutes === 0) {
+        span.textContent = `(${seconds} s)`;
+      } else if (minutes === 1) {
+        span.textContent = `(1 min ${seconds} s)`;
+      } else {
+        span.textContent = `(${minutes} min ${seconds} s)`;
+      }
     });
 
     audio.addEventListener("error", function () {
-      span.textContent = " — ?";
+      span.textContent = "(durée inconnue)";
     });
   });
 }
+
 document.getElementById("player").addEventListener("ended", function () {
   currentIndex++;
 
+  const pause = Number(document.getElementById("pause").value);
+
   if (currentIndex < playlist.length) {
-    const pause = Number(document.getElementById("pause").value);
     setTimeout(playCurrent, pause);
-  } } else {
-  if (document.getElementById("loopPlaylist").checked) {
+  } else if (document.getElementById("loopPlaylist").checked) {
     currentIndex = 0;
-    const pause = Number(document.getElementById("pause").value);
     setTimeout(playCurrent, pause);
   } else {
     document.getElementById("nowPlaying").textContent = "Fin de la sélection.";
   }
-}
 });
 
 function clearAll() {
