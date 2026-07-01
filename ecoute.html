@@ -60,7 +60,8 @@
       white-space: nowrap;
     }
 
-    .preview {
+    .preview,
+    .add-sound {
       border: 1px solid #111;
       background: white;
       padding: 5px 9px;
@@ -151,7 +152,7 @@
 <h1>Voiage de souvenirs<br>à vapeur</h1>
 
 <p>
-  Choisissez des fragments, préécoutez-les si nécessaire, puis organisez votre propre ordre d’écoute.
+  Choisissez des fragments, préécoutez-les si nécessaire, puis ajoutez-les à votre playlist. Un même son peut être ajouté plusieurs fois.
 </p>
 
 <h2 class="category-title">Vocalisations</h2>
@@ -276,13 +277,10 @@ function renderSoundGroups() {
       button.textContent = "écouter";
       button.addEventListener("click", () => previewSound(sound.src));
 
-      const label = document.createElement("label");
-
-      const checkbox = document.createElement("input");
-      checkbox.type = "checkbox";
-      checkbox.value = sound.src;
-      checkbox.dataset.title = sound.title;
-      checkbox.addEventListener("change", updatePlaylist);
+      const addButton = document.createElement("button");
+      addButton.className = "add-sound";
+      addButton.textContent = "ajouter";
+      addButton.addEventListener("click", () => addToPlaylist(sound));
 
       const number = document.createElement("span");
       number.className = "sound-number";
@@ -293,12 +291,10 @@ function renderSoundGroups() {
       duration.dataset.src = sound.src;
       duration.textContent = "(durée...)";
 
-      label.appendChild(checkbox);
-      label.appendChild(number);
-      label.appendChild(duration);
-
       span.appendChild(button);
-      span.appendChild(label);
+      span.appendChild(addButton);
+      span.appendChild(number);
+      span.appendChild(duration);
       div.appendChild(span);
     });
 
@@ -326,23 +322,10 @@ function previewSound(src) {
   });
 }
 
-function updatePlaylist() {
-  const checked = document.querySelectorAll('#soundsContainer input[type="checkbox"]:checked');
-  const oldOrder = playlist.map(item => item.src);
-
-  const selected = Array.from(checked).map(item => ({
-    src: item.value,
-    title: item.dataset.title
-  }));
-
-  playlist = selected.sort((a, b) => {
-    const indexA = oldOrder.indexOf(a.src);
-    const indexB = oldOrder.indexOf(b.src);
-
-    if (indexA === -1 && indexB === -1) return 0;
-    if (indexA === -1) return 1;
-    if (indexB === -1) return -1;
-    return indexA - indexB;
+function addToPlaylist(sound) {
+  playlist.push({
+    src: sound.src,
+    title: sound.title
   });
 
   renderPlaylist();
@@ -380,7 +363,7 @@ function renderPlaylist() {
     const remove = document.createElement("button");
     remove.className = "small-button";
     remove.textContent = "retirer";
-    remove.addEventListener("click", () => removeFromPlaylist(item.src));
+    remove.addEventListener("click", () => removeFromPlaylist(index));
 
     controls.appendChild(up);
     controls.appendChild(down);
@@ -404,10 +387,9 @@ function moveDown(index) {
   renderPlaylist();
 }
 
-function removeFromPlaylist(src) {
-  const input = document.querySelector(`#soundsContainer input[value="${src}"]`);
-  if (input) input.checked = false;
-  updatePlaylist();
+function removeFromPlaylist(index) {
+  playlist.splice(index, 1);
+  renderPlaylist();
 }
 
 function shuffleSelected() {
@@ -486,7 +468,6 @@ document.getElementById("player").addEventListener("ended", function () {
 });
 
 function clearAll() {
-  document.querySelectorAll('#soundsContainer input[type="checkbox"]').forEach(item => item.checked = false);
   playlist = [];
   renderPlaylist();
   document.getElementById("nowPlaying").textContent = "";
