@@ -57,13 +57,12 @@
       align-items: center;
       gap: 8px;
       margin: 8px 18px 8px 0;
-      font-size: 16px;
       white-space: nowrap;
     }
 
     .preview {
       border: 1px solid #111;
-      background: #fff;
+      background: white;
       padding: 5px 9px;
       cursor: pointer;
       font-size: 14px;
@@ -75,8 +74,8 @@
       gap: 5px;
     }
 
-    .sound-name {
-      font-weight: 600;
+    .sound-number {
+      font-weight: 700;
     }
 
     .duration {
@@ -201,14 +200,14 @@ let previewPlayer = new Audio();
 const groups = [
   { title: "Berk", folder: "sons/vocalisations", file: "berk", numbers: [0, 1, 2, 3] },
   { title: "Bham", folder: "sons/vocalisations", file: "bham", numbers: [0, 1, 2, 3] },
-  { title: "Cipcip", folder: "sons/vocalisations", file: "cipcip", numbers: [""] },
+  { title: "Cipcip", folder: "sons/vocalisations", files: ["cipcip.mp3"] },
   { title: "Eh vous", folder: "sons/vocalisations", file: "eh_vous", numbers: [0, 1, 2] },
   { title: "Ehi", folder: "sons/vocalisations", file: "ehi", numbers: [0, 1, 2, 3] },
   { title: "Mm", folder: "sons/vocalisations", file: "mm", numbers: [0, 1, 2, 3, 4, 5, 6, 7, 8] },
   { title: "Oh", folder: "sons/vocalisations", file: "oh", numbers: [0, 1, 2, 3, 4, 5, 6] },
   { title: "Ta", folder: "sons/vocalisations", file: "ta", numbers: [0, 1] },
-  { title: "Ti", folder: "sons/vocalisations", file: "ti", numbers: [""] },
-  { title: "Tiquitic", folder: "sons/vocalisations", file: "tiquitic", numbers: [""] },
+  { title: "Ti", folder: "sons/vocalisations", files: ["ti.mp3"] },
+  { title: "Tiquitic", folder: "sons/vocalisations", files: ["tiquitic.mp3"] },
   { title: "Uh uh", folder: "sons/vocalisations", file: "uh_uh", numbers: [0] },
   { title: "Tac", folder: "sons/vocalisations", file: "tac", numbers: [0, 1, 2, 3, 4, 5, 6, 7, 8] },
   { title: "Vlan", folder: "sons/vocalisations", file: "vlan", numbers: [0, 1, 2, 3, 4, 5] },
@@ -216,20 +215,13 @@ const groups = [
 
   { title: "Bégayer", folder: "sons/begayer", file: "begayer", numbers: [0, 1, 2, 3, 4, 5] },
   { title: "Chant", folder: "sons/chant", file: "chant", numbers: [0, 1, 2] },
-
   { title: "Description trajet — parlé", folder: "sons/description_trajet/parle", file: "trajet", numbers: [0, 1, 2, 3, 4] },
   { title: "Description trajet — sonore", folder: "sons/description_trajet/sonore", file: "description_son", numbers: [0, 1, 2, 3, 4, 5, 6] },
 
   {
     title: "Fragments parole",
     folder: "sons/fragments_parole",
-    files: [
-      "fragment_0.mp3",
-      "fragment_1.mp3",
-      "fragment_2.mp3",
-      "fragment_3.mp3",
-      "fragement_4.mp3"
-    ]
+    files: ["fragment_0.mp3", "fragment_1.mp3", "fragment_2.mp3", "fragment_3.mp3", "fragement_4.mp3"]
   },
 
   { title: "Fusé", folder: "sons/fuse", file: "fuse", numbers: [0, 1, 2, 3] },
@@ -246,6 +238,22 @@ function audioPath(src) {
   return encodeURI(src);
 }
 
+function getSounds(group) {
+  if (group.files) {
+    return group.files.map((fileName, index) => ({
+      src: `${group.folder}/${fileName}`,
+      number: index,
+      title: `${group.title} ${index}`
+    }));
+  }
+
+  return group.numbers.map(number => ({
+    src: `${group.folder}/${group.file}_${number}.mp3`,
+    number: number,
+    title: `${group.title} ${number}`
+  }));
+}
+
 function renderSoundGroups() {
   const container = document.getElementById("soundsContainer");
   container.innerHTML = "";
@@ -259,27 +267,7 @@ function renderSoundGroups() {
     title.textContent = group.title;
     div.appendChild(title);
 
-    if (group.description) {
-      const description = document.createElement("p");
-      description.textContent = group.description;
-      div.appendChild(description);
-    }
-
-    const soundFiles = group.files
-      ? group.files.map(fileName => ({
-          src: `${group.folder}/${fileName}`,
-          title: fileName.replace(".mp3", ""),
-          display: fileName.replace(".mp3", "")
-        }))
-      : group.numbers.map(number => ({
-          src: number === ""
-            ? `${group.folder}/${group.file}.mp3`
-            : `${group.folder}/${group.file}_${number}.mp3`,
-          title: number === "" ? group.title : `${group.title} ${number}`,
-          display: number === "" ? group.title : number
-        }));
-
-    soundFiles.forEach(sound => {
+    getSounds(group).forEach(sound => {
       const span = document.createElement("span");
       span.className = "sound";
 
@@ -296,9 +284,9 @@ function renderSoundGroups() {
       checkbox.dataset.title = sound.title;
       checkbox.addEventListener("change", updatePlaylist);
 
-      const name = document.createElement("span");
-      name.className = "sound-name";
-      name.textContent = sound.display;
+      const number = document.createElement("span");
+      number.className = "sound-number";
+      number.textContent = sound.number;
 
       const duration = document.createElement("span");
       duration.className = "duration";
@@ -306,7 +294,7 @@ function renderSoundGroups() {
       duration.textContent = "(durée...)";
 
       label.appendChild(checkbox);
-      label.appendChild(name);
+      label.appendChild(number);
       label.appendChild(duration);
 
       span.appendChild(button);
@@ -373,15 +361,33 @@ function renderPlaylist() {
     const div = document.createElement("div");
     div.className = "playlist-item";
 
-    div.innerHTML = `
-      <span class="playlist-title">${index + 1}. ${item.title}</span>
-      <span>
-        <button class="small-button" onclick="moveUp(${index})">monter</button>
-        <button class="small-button" onclick="moveDown(${index})">descendre</button>
-        <button class="small-button" onclick="removeFromPlaylist('${item.src}')">retirer</button>
-      </span>
-    `;
+    const title = document.createElement("span");
+    title.className = "playlist-title";
+    title.textContent = `${index + 1}. ${item.title}`;
 
+    const controls = document.createElement("span");
+
+    const up = document.createElement("button");
+    up.className = "small-button";
+    up.textContent = "monter";
+    up.addEventListener("click", () => moveUp(index));
+
+    const down = document.createElement("button");
+    down.className = "small-button";
+    down.textContent = "descendre";
+    down.addEventListener("click", () => moveDown(index));
+
+    const remove = document.createElement("button");
+    remove.className = "small-button";
+    remove.textContent = "retirer";
+    remove.addEventListener("click", () => removeFromPlaylist(item.src));
+
+    controls.appendChild(up);
+    controls.appendChild(down);
+    controls.appendChild(remove);
+
+    div.appendChild(title);
+    div.appendChild(controls);
     playlistList.appendChild(div);
   });
 }
