@@ -8,7 +8,7 @@
   <style>
     body {
       font-family: Helvetica, Arial, sans-serif;
-      max-width: 760px;
+      max-width: 900px;
       margin: 40px auto;
       padding: 0 20px 90px;
       color: #111;
@@ -39,14 +39,14 @@
     }
 
     .group {
-      margin: 22px 0 26px;
+      margin: 26px 0 34px;
       padding-left: 18px;
       border-left: 1px solid #111;
     }
 
     .group-title {
-      margin: 0 0 10px;
-      font-size: 14px;
+      margin: 0 0 14px;
+      font-size: 15px;
       text-transform: uppercase;
       letter-spacing: 0.08em;
       font-weight: 800;
@@ -55,17 +55,34 @@
     .sound {
       display: inline-flex;
       align-items: center;
-      gap: 6px;
-      margin: 6px 12px 6px 0;
+      gap: 8px;
+      margin: 8px 18px 8px 0;
       font-size: 16px;
+      white-space: nowrap;
     }
 
     .preview {
       border: 1px solid #111;
       background: #fff;
-      padding: 3px 7px;
+      padding: 5px 9px;
       cursor: pointer;
-      font-size: 13px;
+      font-size: 14px;
+    }
+
+    .sound label {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .sound-name {
+      font-weight: 600;
+    }
+
+    .duration {
+      color: #666;
+      font-size: 0.9em;
+      font-style: italic;
     }
 
     button {
@@ -116,6 +133,17 @@
       padding: 5px 8px;
       font-size: 13px;
     }
+
+    .loop-control {
+      margin: 18px 0 8px;
+      padding: 12px;
+      border: 1px solid #ddd;
+    }
+
+    .loop-control label {
+      display: block;
+      margin: 5px 0;
+    }
   </style>
 </head>
 
@@ -150,6 +178,13 @@
 
   <div id="playlistList"></div>
 
+  <div class="loop-control">
+    <strong>Mode de répétition</strong>
+    <label><input type="radio" name="loopMode" value="none" checked> Pas de boucle</label>
+    <label><input type="radio" name="loopMode" value="one"> Répéter le son en cours</label>
+    <label><input type="radio" name="loopMode" value="playlist"> Répéter toute la playlist</label>
+  </div>
+
   <button onclick="startPlaylist()">Écouter la playlist</button>
   <button onclick="shuffleSelected()">Mélanger l’ordre</button>
   <button onclick="clearAll()">Tout effacer</button>
@@ -179,13 +214,32 @@ const groups = [
   { title: "Vlan", folder: "sons/vocalisations", file: "vlan", numbers: [0, 1, 2, 3, 4, 5] },
   { title: "Waw", folder: "sons/vocalisations", file: "waw", numbers: [0, 1, 2, 3, 4, 5, 6, 7] },
 
+  { title: "Bégayer", folder: "sons/begayer", file: "begayer", numbers: [0, 1, 2, 3, 4, 5] },
+  { title: "Chant", folder: "sons/chant", file: "chant", numbers: [0, 1, 2] },
+
+  { title: "Description trajet — parlé", folder: "sons/description_trajet/parle", file: "trajet", numbers: [0, 1, 2, 3, 4] },
+  { title: "Description trajet — sonore", folder: "sons/description_trajet/sonore", file: "description_son", numbers: [0, 1, 2, 3, 4, 5, 6] },
+
   {
-    title: "Bégayer",
-    description: "Sons plus articulés qui cherchent et sursautent.",
-    folder: "sons/bégayer",
-    file: "bégayer",
-    numbers: [1, 2, 3, 4, 5, 6]
-  }
+    title: "Fragments parole",
+    folder: "sons/fragments_parole",
+    files: [
+      "fragment_0.mp3",
+      "fragment_1.mp3",
+      "fragment_2.mp3",
+      "fragment_3.mp3",
+      "fragement_4.mp3"
+    ]
+  },
+
+  { title: "Fusé", folder: "sons/fuse", file: "fuse", numbers: [0, 1, 2, 3] },
+
+  { title: "Note tenue — A", folder: "sons/note_tenue", file: "a_tenue", numbers: [0, 1, 2] },
+  { title: "Note tenue — Bene", folder: "sons/note_tenue", file: "bene_tenu", numbers: [0, 1] },
+  { title: "Note tenue — E", folder: "sons/note_tenue", file: "e_tenue", numbers: [0] },
+  { title: "Note tenue — E note", folder: "sons/note_tenue", file: "e_note_tenue", numbers: [1] },
+  { title: "Note tenue — Oh", folder: "sons/note_tenue", file: "oh_tenu", numbers: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9] },
+  { title: "Note tenue — Ok", folder: "sons/note_tenue", file: "ok_tenu", numbers: [0] }
 ];
 
 function audioPath(src) {
@@ -200,33 +254,66 @@ function renderSoundGroups() {
     const div = document.createElement("div");
     div.className = "group";
 
-    let html = `<h3 class="group-title">${group.title}</h3>`;
+    const title = document.createElement("h3");
+    title.className = "group-title";
+    title.textContent = group.title;
+    div.appendChild(title);
 
     if (group.description) {
-      html += `<p class="group-description">${group.description}</p>`;
+      const description = document.createElement("p");
+      description.textContent = group.description;
+      div.appendChild(description);
     }
 
-    group.numbers.forEach(number => {
-      const src = number === ""
-        ? `${group.folder}/${group.file}.mp3`
-        : `${group.folder}/${group.file}_${number}.mp3`;
+    const soundFiles = group.files
+      ? group.files.map(fileName => ({
+          src: `${group.folder}/${fileName}`,
+          title: fileName.replace(".mp3", ""),
+          display: fileName.replace(".mp3", "")
+        }))
+      : group.numbers.map(number => ({
+          src: number === ""
+            ? `${group.folder}/${group.file}.mp3`
+            : `${group.folder}/${group.file}_${number}.mp3`,
+          title: number === "" ? group.title : `${group.title} ${number}`,
+          display: number === "" ? group.title : number
+        }));
 
-      const label = number === ""
-        ? group.title
-        : `${group.title} ${number}`;
+    soundFiles.forEach(sound => {
+      const span = document.createElement("span");
+      span.className = "sound";
 
-      html += `
-        <span class="sound">
-          <button class="preview" onclick="previewSound('${src}')">écouter</button>
-          <label>
-            <input type="checkbox" value="${src}" data-title="${label}" onchange="updatePlaylist()">
-            ${number === "" ? "son" : number}
-          </label>
-        </span>
-      `;
+      const button = document.createElement("button");
+      button.className = "preview";
+      button.textContent = "écouter";
+      button.addEventListener("click", () => previewSound(sound.src));
+
+      const label = document.createElement("label");
+
+      const checkbox = document.createElement("input");
+      checkbox.type = "checkbox";
+      checkbox.value = sound.src;
+      checkbox.dataset.title = sound.title;
+      checkbox.addEventListener("change", updatePlaylist);
+
+      const name = document.createElement("span");
+      name.className = "sound-name";
+      name.textContent = sound.display;
+
+      const duration = document.createElement("span");
+      duration.className = "duration";
+      duration.dataset.src = sound.src;
+      duration.textContent = "(durée...)";
+
+      label.appendChild(checkbox);
+      label.appendChild(name);
+      label.appendChild(duration);
+
+      span.appendChild(button);
+      span.appendChild(label);
+      div.appendChild(span);
     });
 
-    div.innerHTML = html;
     container.appendChild(div);
   });
 }
@@ -246,14 +333,13 @@ function previewSound(src) {
   previewPlayer.pause();
   previewPlayer = new Audio(encodedSrc);
 
-  previewPlayer.play().catch(function(error) {
-    console.error("Impossible de lire le son :", encodedSrc, error);
+  previewPlayer.play().catch(function () {
     alert("Impossible de lire le fichier : " + src);
   });
 }
 
 function updatePlaylist() {
-  const checked = document.querySelectorAll('input[type="checkbox"]:checked');
+  const checked = document.querySelectorAll('#soundsContainer input[type="checkbox"]:checked');
   const oldOrder = playlist.map(item => item.src);
 
   const selected = Array.from(checked).map(item => ({
@@ -313,7 +399,7 @@ function moveDown(index) {
 }
 
 function removeFromPlaylist(src) {
-  const input = document.querySelector(`input[value="${src}"]`);
+  const input = document.querySelector(`#soundsContainer input[value="${src}"]`);
   if (input) input.checked = false;
   updatePlaylist();
 }
@@ -346,17 +432,47 @@ function playCurrent() {
   player.src = audioPath(playlist[currentIndex].src);
   nowPlaying.textContent = "En écoute : " + playlist[currentIndex].title;
 
-  player.play().catch(function(error) {
-    console.error("Impossible de lire le son :", playlist[currentIndex].src, error);
+  player.play().catch(function () {
     alert("Impossible de lire le fichier : " + playlist[currentIndex].src);
   });
 }
 
+function loadDurations() {
+  document.querySelectorAll(".duration").forEach(span => {
+    const audio = new Audio(audioPath(span.dataset.src));
+
+    audio.addEventListener("loadedmetadata", function () {
+      const minutes = Math.floor(audio.duration / 60);
+      const seconds = Math.floor(audio.duration % 60);
+
+      if (minutes === 0) {
+        span.textContent = `(${seconds} s)`;
+      } else {
+        span.textContent = `(${minutes} min ${seconds} s)`;
+      }
+    });
+
+    audio.addEventListener("error", function () {
+      span.textContent = "(durée inconnue)";
+    });
+  });
+}
+
 document.getElementById("player").addEventListener("ended", function () {
+  const pause = Number(document.getElementById("pause").value);
+  const loopMode = document.querySelector('input[name="loopMode"]:checked').value;
+
+  if (loopMode === "one") {
+    setTimeout(playCurrent, pause);
+    return;
+  }
+
   currentIndex++;
 
   if (currentIndex < playlist.length) {
-    const pause = Number(document.getElementById("pause").value);
+    setTimeout(playCurrent, pause);
+  } else if (loopMode === "playlist") {
+    currentIndex = 0;
     setTimeout(playCurrent, pause);
   } else {
     document.getElementById("nowPlaying").textContent = "Fin de la sélection.";
@@ -364,7 +480,7 @@ document.getElementById("player").addEventListener("ended", function () {
 });
 
 function clearAll() {
-  document.querySelectorAll('input[type="checkbox"]').forEach(item => item.checked = false);
+  document.querySelectorAll('#soundsContainer input[type="checkbox"]').forEach(item => item.checked = false);
   playlist = [];
   renderPlaylist();
   document.getElementById("nowPlaying").textContent = "";
@@ -372,6 +488,7 @@ function clearAll() {
 }
 
 renderSoundGroups();
+loadDurations();
 renderPlaylist();
 </script>
 
